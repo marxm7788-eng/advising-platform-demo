@@ -1,0 +1,30 @@
+{
+  "name": "المنصة الرقمية لكلية العلوم — جامعة سوهاج",
+  "short_name": "كلية العلوم",
+  "description": "بوابة الإرشاد الأكاديمي والخدمات الطلابية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c1e36",
+  "theme_color": "#0c1e36",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "assets/11-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/12-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/16-app-icon.png",
+      "sizes": "1254x1254",
+      "type": "image/png"
+    }
+  ]
+}

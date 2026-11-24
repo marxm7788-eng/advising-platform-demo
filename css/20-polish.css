@@ -1,0 +1,40 @@
+/* ===== FOS Portal — Polish Layer ===== */
+::selection { background: rgba(20,184,166,.25); }
+* { scrollbar-width: thin; scrollbar-color: var(--teal-500) transparent; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--teal-500), #0891b2); border-radius: 99px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+:focus-visible { outline: 3px solid rgba(20,184,166,.45); outline-offset: 2px; border-radius: 6px; }
+
+.card, .stat-card, .login-panel, .modal, .lp-svc {
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.card:hover, .stat-card:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(12,30,54,.12); }
+
+.btn { position: relative; overflow: hidden; }
+.btn-primary { background: linear-gradient(135deg, var(--navy), var(--navy-600)); }
+
+.form-control:focus, select.form-control:focus {
+  border-color: var(--teal-500);
+  box-shadow: 0 0 0 4px rgba(20,184,166,.14);
+}
+
+/* ظهور تدريجي عند التمرير */
+.fos-reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.fos-reveal.fos-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .fos-reveal { opacity: 1; transform: none; transition: none; }
+  .landing-hero-bg { animation: none; }
+}
+
+/* زرار العودة لأعلى الصفحة */
+#fos-back-top {
+  position: fixed; bottom: 22px; left: 22px; z-index: 900;
+  width: 44px; height: 44px; border-radius: 13px; border: 1px solid var(--gray-200);
+  background: var(--surface, #fff); color: var(--navy); cursor: pointer;
+  box-shadow: var(--shadow-md); opacity: 0; pointer-events: none; transform: translateY(10px);
+  transition: all .25s ease;
+}
+#fos-back-top.fos-show { opacity: 1; pointer-events: auto; transform: none; }
+#fos-back-top:hover { background: var(--teal); color: #fff; border-color: var(--teal); }

@@ -1,0 +1,32 @@
+/* Local-only backup and restore workspace — Faculty of Science, Sohag University */
+.lb-shell { max-width: 1120px; margin: 0 auto; padding: 1rem 0 2rem; }
+.lb-heading { display: flex; align-items: center; gap: 1rem; margin: 0 0 1.35rem; }
+.lb-heading h1 { color: var(--navy, #0c1e36); font-size: clamp(1.45rem, 2.6vw, 2rem); line-height: 1.35; margin: .12rem 0 .25rem; }
+.lb-heading p { color: var(--gray-500, #64748b); margin: 0; }
+.lb-mark { width: 3.4rem; height: 3.4rem; border-radius: 1.1rem; display: grid; place-items: center; color: #0f766e; background: #e7f5f2; font-size: 1.35rem; flex: 0 0 auto; }
+.lb-kicker { color: #0f766e; font-size: .78rem; font-weight: 800; letter-spacing: .02em; }
+.lb-important { display: flex; gap: .8rem; border: 1px solid #b7e2d8; background: #effaf7; color: #174d46; padding: 1rem 1.15rem; border-radius: 14px; margin-bottom: 1.15rem; }
+.lb-important > i { margin-top: .2rem; font-size: 1.15rem; }
+.lb-important p { margin: .25rem 0 0; line-height: 1.8; }
+.lb-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.lb-card { position: relative; border: 1px solid #e2e8f0; border-radius: 16px; background: #fff; box-shadow: 0 6px 22px rgba(12,30,54,.055); padding: 1.35rem; display: flex; flex-direction: column; align-items: stretch; }
+.lb-step { position: absolute; inset-inline-end: 1.15rem; top: 1.15rem; width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center; color: #fff; background: #0f766e; font-weight: 800; }
+.lb-card h2 { color: var(--navy, #0c1e36); font-size: 1.15rem; margin: .2rem 2.6rem .45rem 0; }
+.lb-card p { color: var(--gray-500, #64748b); min-height: 4.2rem; line-height: 1.75; margin-bottom: 1rem; }
+.lb-card label { font-weight: 700; font-size: .88rem; margin: .45rem 0 .3rem; color: #243b53; }
+.lb-card input[type="password"], .lb-card input[type="file"] { width: 100%; min-height: 2.8rem; border: 1px solid #cbd5e1; border-radius: 9px; background: #fff; color: #0f172a; padding: .6rem .75rem; font: inherit; }
+.lb-card input:focus-visible, .lb-action:focus-visible { outline: 3px solid rgba(15,118,110,.25); outline-offset: 2px; border-color: #0f766e; }
+.lb-action { margin-top: auto; width: 100%; justify-content: center; min-height: 2.8rem; }
+.lb-action:disabled { opacity: .58; cursor: not-allowed; }
+.lb-preview { margin: .8rem 0; padding: .8rem; border-radius: 10px; border: 1px solid #b7e2d8; background: #effaf7; color: #174d46; font-size: .88rem; line-height: 1.8; overflow-wrap: anywhere; }
+.lb-status { margin: 1rem 0; padding: .85rem 1rem; border-radius: 10px; line-height: 1.75; }
+.lb-status.info { color: #334155; background: #f1f5f9; border: 1px solid #e2e8f0; }
+.lb-status.success { color: #166534; background: #f0fdf4; border: 1px solid #bbf7d0; }
+.lb-status.error { color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; }
+.lb-caution { padding: .9rem 1rem; border-inline-start: 4px solid #d97706; border-radius: 8px; color: #704d13; background: #fffbeb; line-height: 1.8; font-size: .9rem; }
+@media (max-width: 760px) {
+  .lb-shell { padding-top: .4rem; }
+  .lb-grid { grid-template-columns: 1fr; }
+  .lb-heading { align-items: flex-start; }
+  .lb-card p { min-height: 0; }
+}
