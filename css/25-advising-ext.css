@@ -1,0 +1,35 @@
+/* وحدة الإرشاد الأكاديمي: تنسيقات مساعدة فوق مكونات المنصة */
+.adx-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;flex-wrap:wrap}
+.adx-head-ico{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--teal-50);color:var(--teal);font-size:1.05rem;flex:none}
+.adx-head-txt{flex:1;min-width:200px}
+.adx-head-act{display:flex;gap:.4rem;flex-wrap:wrap}
+.adx-mini-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.6rem}
+.adx-mini-stats>div{padding:.7rem .8rem;border:1px solid var(--gray-200);border-radius:12px;background:var(--surface,#fff);display:flex;flex-direction:column;gap:.1rem}
+.adx-mini-stats b{font-size:1.35rem;color:var(--ink,var(--navy));line-height:1.2}
+.adx-mini-stats span{font-size:.72rem;color:var(--gray-500)}
+.adx-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.6rem;margin-bottom:.9rem}
+.adx-row{cursor:pointer}.adx-row:hover td{background:var(--gray-50)}
+.adx-nowrap{white-space:nowrap}
+.adx-tabs{display:flex;gap:.4rem;flex-wrap:wrap}
+.adx-line{display:flex;justify-content:space-between;align-items:center;gap:.6rem;padding:.55rem 0;border-bottom:1px solid var(--gray-100)}
+.adx-note{padding:.7rem .8rem;border:1px solid var(--gray-200);border-radius:10px;margin-bottom:.5rem;background:var(--surface,#fff)}
+.adx-bar{display:grid;grid-template-columns:minmax(110px,1.2fr) 2fr auto;gap:.6rem;align-items:center;margin-bottom:.55rem;font-size:.82rem}
+.adx-bar>div{height:9px;border-radius:99px;background:var(--gray-100);overflow:hidden}
+.adx-bar i{display:block;height:100%;border-radius:99px;background:var(--teal)}
+.adx-live{color:var(--teal);font-size:.7rem;margin-inline-start:.5rem}.adx-live i{font-size:.45rem;vertical-align:middle;animation:adxp 1.6s infinite}
+@keyframes adxp{50%{opacity:.25}}
+.adx-term-now{display:flex;align-items:center;gap:.6rem;font-size:1.15rem;margin-bottom:.3rem}
+.adx-check{display:flex;align-items:center;gap:.4rem;margin-top:.5rem;font-size:.85rem}
+.adx-hour{display:grid;grid-template-columns:1fr 110px 110px 1.2fr auto;gap:.4rem;margin-bottom:.4rem}
+@media(max-width:700px){.adx-hour{grid-template-columns:1fr 1fr}.adx-bar{grid-template-columns:1fr 1.5fr auto}}
+.adx-overlay{position:fixed;inset:0;background:rgba(8,15,28,.55);z-index:3000;display:grid;place-items:center;padding:1rem}
+.adx-dialog{width:min(640px,100%);max-height:86vh;overflow:auto}
+.adx-chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.adx-chip{padding:.3rem .75rem;border-radius:99px;background:var(--teal-50);color:var(--teal);font-size:.8rem;font-weight:700}
+.adx-list{margin:.3rem 0 0;padding-inline-start:1.1rem;font-size:.85rem;line-height:1.9;color:var(--gray-700)}
+.adx-dot{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:none;align-self:center}
+.adx-tone .card-body{padding:.7rem 1rem}
+.step-dot.skip{background:var(--gray-200);color:var(--gray-500)}
+.step-lbl.step-skip{text-decoration:line-through;opacity:.7}
+.step-sub{font-size:.55rem;color:var(--gray-500);text-align:center;max-width:70px;line-height:1.2}
+.adx-periods input[type=datetime-local]{min-width:185px}
