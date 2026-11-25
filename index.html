@@ -26,7 +26,8 @@
   <link rel="stylesheet" href="css/22-support-messaging.css" />
   <link rel="stylesheet" href="css/23-theme.css?v=20261125d" />
   <link rel="stylesheet" href="css/20-polish.css" />
-  <link rel="stylesheet" href="css/24-student-services.css?v=2" />
+  <link rel="stylesheet" href="css/24-student-services.css?v=3" />
+  <link rel="stylesheet" href="css/25-advising-ext.css?v=1" />
 </head>
 <body>
   <div id="toast" class="toast"></div>
@@ -214,12 +215,12 @@
                         <div class="admin-hub-section-title"><div><h2>المتابعة والإشراف</h2><p>نظرة شاملة على الأداء الأكاديمي ومساحات الأدوار</p></div><span class="admin-hub-access"><i class="fas fa-check-circle"></i> وصول شامل</span></div>
             <div class="admin-hub-grid">
               <button class="admin-hub-card" onclick="App.navigate('dean-dashboard')"><span class="admin-hub-icon dean"><i class="fas fa-chart-pie"></i></span><span class="admin-hub-card-title">شاشة العميد</span><span class="admin-hub-card-desc">لوحة المؤشرات والمتابعة والإشراف على الأداء الأكاديمي والإداري.</span><span class="admin-hub-card-link">فتح لوحة العميد <i class="fas fa-arrow-left"></i></span></button>
-              <button class="admin-hub-card" onclick="App.navigate('student-dashboard')"><span class="admin-hub-icon student"><i class="fas fa-user-graduate"></i></span><span class="admin-hub-card-title">شاشة الطالب</span><span class="admin-hub-card-desc">معاينة مساحة الطالب وخدماته وخطته الدراسية والنماذج والطلبات.</span><span class="admin-hub-card-link">فتح شاشة الطالب <i class="fas fa-arrow-left"></i></span></button>
+              <button class="admin-hub-card" onclick="App.navigate('student-dashboard')"><span class="admin-hub-icon student"><i class="fas fa-user-graduate"></i></span><span class="admin-hub-card-title">شاشة الطالب</span><span class="admin-hub-card-desc">معاينة مساحة الطالب وخدماته وخطته الدراسية والإرشاد الأكاديمي.</span><span class="admin-hub-card-link">فتح شاشة الطالب <i class="fas fa-arrow-left"></i></span></button>
             </div>
             <div class="admin-hub-section-title"><div><h2>الطلبات والخدمات</h2><p>متابعة الطلبات الواردة والنماذج وبرامج الدعم</p></div></div>
             <div class="admin-hub-grid">
               <button class="admin-hub-card" onclick="App.navigate('staff-inbox')"><span class="admin-hub-icon requests"><i class="fas fa-inbox"></i></span><span class="admin-hub-card-title">الطلبات وسير العمل</span><span class="admin-hub-card-desc">متابعة الطلبات الواردة ومراجعة الإجراءات وحالات التنفيذ.</span><span class="admin-hub-card-link">إدارة الطلبات <i class="fas fa-arrow-left"></i></span></button>
-              <button class="admin-hub-card" onclick="App.navigate('forms-list')"><span class="admin-hub-icon forms"><i class="fas fa-file-alt"></i></span><span class="admin-hub-card-title">النماذج والطلبات</span><span class="admin-hub-card-desc">استعراض النماذج الإلكترونية ومسار تقديم الطلبات.</span><span class="admin-hub-card-link">فتح النماذج <i class="fas fa-arrow-left"></i></span></button>
+              <button class="admin-hub-card" onclick="App.navigate('forms-list')"><span class="admin-hub-icon forms"><i class="fas fa-file-alt"></i></span><span class="admin-hub-card-title">الإرشاد الأكاديمي</span><span class="admin-hub-card-desc">استعراض النماذج الإلكترونية ومسار تقديم الطلبات.</span><span class="admin-hub-card-link">فتح النماذج <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card" onclick="App.navigate('talent-admin')"><span class="admin-hub-icon academic"><i class="fas fa-star"></i></span><span class="admin-hub-card-title">دعم الموهوبين</span><span class="admin-hub-card-desc">مراجعة طلبات التسجيل في برنامج دعم الموهوبين وتحديث حالاتها.</span><span class="admin-hub-card-link">فتح لوحة الموهوبين <i class="fas fa-arrow-left"></i></span></button>
             </div>
             <div class="admin-hub-section-title"><div><h2>الطلاب والإرشاد</h2><p>بيانات الطلاب وإسناد المرشدين والأعوام الجامعية</p></div></div>
@@ -230,12 +231,10 @@
             </div>
             <div class="admin-hub-section-title"><div><h2>مراكز البيانات</h2><p>رفع البيانات والسجلات الدراسية والنسخ الاحتياطي</p></div></div>
             <div class="admin-hub-grid">
-              <button class="admin-hub-card" onclick="App.navigate('imports')"><span class="admin-hub-icon academic"><i class="fas fa-file-import"></i></span><span class="admin-hub-card-title">رفع بيانات الطلاب</span><span class="admin-hub-card-desc">تحديث بيانات الطلاب الأساسية وإسناد المرشدين عبر ملفات Excel.</span><span class="admin-hub-card-link">فتح مركز بيانات الطلاب <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card" onclick="App.navigate('local-backup')"><span class="admin-hub-icon academic"><i class="fas fa-box-archive"></i></span><span class="admin-hub-card-title">نسخ البيانات واستعادتها</span><span class="admin-hub-card-desc">نقل سجل المنصة ورسائل صوت الطالب والمرفقات بين الأجهزة بملف مشفّر.</span><span class="admin-hub-card-link">فتح مركز النسخ <i class="fas fa-arrow-left"></i></span></button>
             </div>
             <div class="admin-hub-section-title"><div><h2>النظام والصلاحيات</h2><p>الحسابات والأدوار والأذونات المعتمدة</p></div></div>
             <div class="admin-hub-grid">
-              <button class="admin-hub-card admin-hub-primary" onclick="App.navigate('roles-mgmt')"><span class="admin-hub-icon"><i class="fas fa-sliders-h"></i></span><span class="admin-hub-card-title">الأدوار والصلاحيات</span><span class="admin-hub-card-desc">ضبط الوصول لكل دور وإدارة الأذونات المعتمدة.</span><span class="admin-hub-card-link">فتح إدارة الأدوار <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card" onclick="App.navigate('users-mgmt')"><span class="admin-hub-icon users"><i class="fas fa-user-cog"></i></span><span class="admin-hub-card-title">المستخدمون والحسابات</span><span class="admin-hub-card-desc">متابعة الحسابات والأدوار وتفعيل المستخدمين وإدارة الوصول.</span><span class="admin-hub-card-link">إدارة المستخدمين <i class="fas fa-arrow-left"></i></span></button>
             </div>
           </div>
@@ -571,6 +570,8 @@
   <script src="js/vendor/35-student-voice-direct.js"></script>
   <script src="js/vendor/31-local-backup.js"></script>
   <script src="js/vendor/63-student-services.js?v=2"></script>
+  <script src="js/vendor/64-advising-ext.js?v=1"></script>
+  <script src="js/vendor/65-advising-ext2.js?v=1"></script>
   <script src="js/vendor/41-ui-enhancements.js"></script>
 </body>
 </html>
