@@ -123,7 +123,7 @@ window.FOS_SEED = {
     { key: 'coordinator', role: 'coordinator', label: 'منسق الإرشاد بالقسم' },
     { key: 'manager', role: 'manager', label: 'مدير وحدة الإرشاد' },
     { key: 'vice', role: 'vice', label: 'وكيل الكلية' },
-    { key: 'affairs', role: 'affairs', label: 'شؤون الطلاب' }
+    { key: 'dean', role: 'dean', label: 'العميد' }
   ],
 
   services: [
