@@ -132,10 +132,12 @@
   function canPage(pageId) {
     if (!currentUser) return false;
     if (pageId === 'academic-structure' || pageId === 'admin-settings') return false;
-    if (pageId === 'voice-dean') return currentUser.role === 'dean' || currentUser.role === 'admin';
-    if (pageId === 'voice-admin') return currentUser.role === 'admin';
-    if (pageId === 'student-voice') return currentUser.role === 'student' || currentUser.role === 'admin';
-    if (pageId === 'imports' || pageId === 'transcripts') return currentUser.role === 'admin';
+    if (['study-plan','student-voice','voice-admin','conversations','export-print','imports','transcripts'].includes(pageId)) return false;
+    if (pageId === 'voice-dean') return ['dean','admin','student'].includes(currentUser.role);
+    if (pageId === 'terms') return currentUser.role === 'dean' || currentUser.role === 'admin';
+    if (pageId === 'support-cases') return ['advisor','coordinator','manager','vice','dean','admin'].includes(currentUser.role);
+    if (pageId === 'periods') return currentUser.role === 'manager' || currentUser.role === 'admin' || currentUser.role === 'dean';
+    if (pageId === 'services' || pageId === 'forms-list' || pageId === 'my-requests') return currentUser.role === 'student' || currentUser.role === 'admin';
     if (pageId === 'ss-new' || pageId === 'ss-track') return true;
     if (pageId === 'ss-desk') return ['affairs','vice','dean','manager','admin'].includes(currentUser.role);
     if (pageId === 'talent-admin') return currentUser.role === 'admin';
@@ -592,37 +594,30 @@
       { section: 'الرئيسية' },
       { id: 'admin-dashboard', icon: 'fa-th-large', label: 'مركز مدير النظام' },
       { id: 'student-dashboard', icon: 'fa-home', label: 'القائمة الرئيسية' },
-      { id: 'study-plan', icon: 'fa-sitemap', label: 'الخطط الدراسية' },
       { id: 'gpa-calc', icon: 'fa-calculator', label: 'حاسبة المعدل' },
       { id: 'talent-program', icon: 'fa-star', label: 'برنامج دعم الموهوبين' },
-      { section: 'الخدمات' },
-      { id: 'forms-list', icon: 'fa-file-alt', label: 'النماذج والطلبات' },
+      { section: 'وحدة الإرشاد الأكاديمي والخدمات الطلابية' },
+      { id: 'forms-list', icon: 'fa-user-graduate', label: 'الإرشاد الأكاديمي' },
       { id: 'my-requests', icon: 'fa-list-check', label: 'طلباتي' },
-      { id: 'services', icon: 'fa-th-large', label: 'خدمات إلكترونية' },
-      { id: 'student-voice', icon: 'fa-comment-dots', label: 'صوت الطالب' },
-      { id: 'conversations', icon: 'fa-comments', label: 'المحادثات' },
-      { section: 'خدمات الطلاب والخريجين' },
-      { id: 'ss-new', icon: 'fa-file-circle-plus', label: 'تقديم طلب' },
+      { id: 'ss-new', icon: 'fa-file-circle-plus', label: 'تقديم طلب (طلاب وخريجين)' },
       { id: 'ss-track', icon: 'fa-location-dot', label: 'متابعة طلب' },
-      { id: 'ss-desk', icon: 'fa-inbox', label: 'إدارة الطلبات' },
-      { section: 'العمل' },
-      { id: 'staff-inbox', icon: 'fa-inbox', label: 'صندوق الطلبات' },
-      { id: 'students-search', icon: 'fa-search', label: 'البحث عن طالب' },
-      { id: 'export-print', icon: 'fa-print', label: 'تصدير وطباعة' },
-      { section: 'الإدارة' },
-      { id: 'dean-dashboard', icon: 'fa-chart-pie', label: 'لوحة العميد' },
+      { id: 'ss-desk', icon: 'fa-inbox', label: 'إدارة طلبات الطلاب والخريجين' },
       { id: 'support-cases', icon: 'fa-heart-pulse', label: 'دعم المتعثرين' },
       { id: 'voice-dean', icon: 'fa-ear-listen', label: 'استمع للطلاب' },
-      { id: 'students-mgmt', icon: 'fa-users', label: 'الطلاب' },
+      { id: 'services', icon: 'fa-th-large', label: 'خدمات إلكترونية' },
+      { section: 'العمل' },
+      { id: 'staff-inbox', icon: 'fa-inbox', label: 'صندوق الطلبات' },
+      { id: 'students-search', icon: 'fa-search', label: 'البحث عن مستخدم' },
+      { section: 'الإدارة' },
+      { id: 'dean-dashboard', icon: 'fa-chart-pie', label: 'لوحة العميد' },
+      { id: 'terms', icon: 'fa-box-archive', label: 'الترمات والأرشيف' },
       { id: 'periods', icon: 'fa-calendar-alt', label: 'الفترات الأكاديمية' },
+      { id: 'students-mgmt', icon: 'fa-users', label: 'الطلاب' },
       { id: 'assignments', icon: 'fa-user-tie', label: 'إسناد المرشدين' },
-      { id: 'users-mgmt', icon: 'fa-user-shield', label: 'المستخدمون' },
-      { id: 'imports', icon: 'fa-file-import', label: 'رفع البيانات الأكاديمية' },
-      { id: 'talent-admin', icon: 'fa-star', label: 'إدارة دعم الموهوبين' },
+      { id: 'users-mgmt', icon: 'fa-user-shield', label: 'المستخدمون والصلاحيات' },
       { id: 'faculty-management', icon: 'fa-users-gear', label: 'أعضاء هيئة التدريس' },
+      { id: 'talent-admin', icon: 'fa-star', label: 'إدارة دعم الموهوبين' },
       { id: 'local-backup', icon: 'fa-box-archive', label: 'نسخ البيانات واستعادتها' },
-      { id: 'voice-admin', icon: 'fa-chart-bar', label: 'إدارة صوت الطالب' },
-      { id: 'roles-mgmt', icon: 'fa-user-lock', label: 'الأدوار والصلاحيات' },
     ];
 
     const activeView = currentView || defaultView();
@@ -731,6 +726,7 @@
       'voice-dean': () => window.StudentVoiceDirect && StudentVoiceDirect.renderDean(),
       'voice-admin': () => window.StudentVoice && StudentVoice.renderAdmin()
     };
+    if (window.AdvExt && AdvExt.renderers) Object.assign(renderers, AdvExt.renderers);
     if (renderers[viewId]) {
       try {
         const result = renderers[viewId]();
@@ -749,18 +745,18 @@
     const t = {
       'admin-dashboard': 'مركز مدير النظام', 'student-dashboard': 'القائمة الرئيسية', 'student-profile': 'بياناتي',
       'study-plan': 'الخطط الدراسية', 'gpa-calc': 'حاسبة المعدل',
-      'forms-list': 'النماذج والطلبات', 'form-fill': 'تعبئة النموذج',
+      'forms-list': 'الإرشاد الأكاديمي', 'form-fill': 'تعبئة النموذج',
       'my-requests': 'طلباتي', 'request-detail': 'تفاصيل الطلب',
       'notifications': 'الإشعارات', 'services': 'خدمات إلكترونية',
       'staff-inbox': 'صندوق الطلبات', 'dean-dashboard': 'لوحة العميد',
-      'students-mgmt': 'إدارة الطلاب', 'students-search': 'البحث عن طالب',
+      'students-mgmt': 'إدارة الطلاب', 'students-search': 'البحث عن مستخدم', 'terms': 'الترمات والأرشيف',
       'periods': 'الفترات الأكاديمية',
       'assignments': 'إسناد المرشدين', 'imports': 'رفع البيانات الأكاديمية',
       'transcripts': 'رفع السجلات الدراسية',
-      'ss-new': 'تقديم طلب', 'ss-track': 'متابعة طلب', 'ss-desk': 'إدارة الطلبات',
+      'ss-new': 'تقديم طلب (طلاب وخريجين)', 'ss-track': 'متابعة طلب', 'ss-desk': 'إدارة طلبات الطلاب والخريجين',
       'talent-program': 'برنامج دعم الموهوبين', 'talent-admin': 'إدارة دعم الموهوبين',
       'local-backup': 'نسخ البيانات واستعادتها',
-      'users-mgmt': 'المستخدمون', 'roles-mgmt': 'الأدوار والصلاحيات', 'export-print': 'تصدير وطباعة',
+      'users-mgmt': 'المستخدمون والصلاحيات', 'roles-mgmt': 'الأدوار والصلاحيات', 'export-print': 'تصدير وطباعة',
       'student-voice': 'صوت الطالب', 'voice-dean': 'استمع للطلاب', 'voice-admin': 'إدارة صوت الطالب'
       , 'support-cases': 'دعم الطلاب المتعثرين', 'conversations': 'المحادثات'
     };
@@ -826,7 +822,6 @@
     const actions = document.getElementById('sd-actions');
     if (actions) actions.innerHTML = `
       <div class="qa-tile" onclick="App.navigate('forms-list')"><span class="qa-icon"><i class="fas fa-file-circle-plus"></i></span><span>تقديم طلب</span><i class="fas fa-arrow-left qa-arrow"></i></div>
-      <div class="qa-tile" onclick="App.navigate('study-plan')"><span class="qa-icon"><i class="fas fa-sitemap"></i></span><span>الخطط الدراسية</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('gpa-calc')"><span class="qa-icon"><i class="fas fa-calculator"></i></span><span>حاسبة المعدل</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('my-requests')"><span class="qa-icon"><i class="fas fa-list-check"></i></span><span>طلباتي</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('student-profile')"><span class="qa-icon"><i class="fas fa-id-card"></i></span><span>بياناتي</span><i class="fas fa-arrow-left qa-arrow"></i></div>`;
@@ -869,10 +864,9 @@
     if (actions) {
       const tiles = [
         { id: 'staff-inbox', icon: 'fa-inbox', label: 'صندوق الطلبات' },
-        { id: 'students-search', icon: 'fa-search', label: 'البحث عن طالب' },
+        { id: 'students-search', icon: 'fa-search', label: 'البحث عن مستخدم' },
         { id: 'dean-dashboard', icon: 'fa-chart-pie', label: 'لوحة العميد' },
         { id: 'students-mgmt', icon: 'fa-users', label: 'إدارة الطلاب' },
-        { id: 'export-print', icon: 'fa-print', label: 'تصدير وطباعة' },
         { id: 'admin-dashboard', icon: 'fa-th-large', label: 'مركز مدير النظام' }
       ].filter(t => canPage(t.id));
       actions.innerHTML = tiles.map(t => `<div class="qa-tile" onclick="App.navigate('${t.id}')"><span class="qa-icon"><i class="fas ${t.icon}"></i></span><span>${t.label}</span><i class="fas fa-arrow-left qa-arrow"></i></div>`).join('');
@@ -2915,7 +2909,7 @@ ${coverPage}${pages}
       { key: 'advising', title: 'نماذج وحدة الإرشاد الأكاديمي', items: S.formTypes.filter(f => f.category === 'advising') },
       { key: 'affairs', title: 'نماذج شؤون الطلاب', items: S.formTypes.filter(f => f.category === 'affairs') }
     ].filter(g => g.items.length);
-    let html = `<div class="forms-hub-intro"><div class="forms-hub-icon"><i class="fas fa-file-signature"></i></div><div><div class="fw-extrabold">النماذج والطلبات الإلكترونية</div><div class="text-sm text-muted">اختر الجهة المختصة ثم افتح الاستمارة المطلوبة. إرسال الطلب لا يعني اعتماده أو تنفيذه.</div></div></div>`;
+    let html = `<div class="forms-hub-intro"><div class="forms-hub-icon"><i class="fas fa-file-signature"></i></div><div><div class="fw-extrabold">الإرشاد الأكاديمي</div><div class="text-sm text-muted">تابع لوحدة الإرشاد الأكاديمي والخدمات الطلابية. اختر الجهة المختصة ثم افتح الاستمارة المطلوبة. إرسال الطلب لا يعني اعتماده أو تنفيذه.</div></div></div>`;
     groups.forEach((g, gi) => {
       const isAdvising = g.key === 'advising';
       html += `<section class="forms-category ${isAdvising ? 'forms-category-primary' : ''}" style="--category-delay:${gi * 90}ms">
@@ -2927,7 +2921,7 @@ ${coverPage}${pages}
         <div class="forms-category-content ${isAdvising ? '' : 'is-collapsed'}" id="forms-category-${g.key}">
           <div class="forms-cards-grid">`;
       html += g.items.map((f, fi) => {
-        const open = periods[f.id] !== false;
+        const open = periods[f.id] !== false && (!window.AdvExt || AdvExt.periodOpen(f.id));
         const isAddDrop = f.id === 'adddrop';
         return `<article class="card form-hub-card" style="--card-delay:${fi * 35}ms;--form-color:${f.color};${open ? '' : 'opacity:.55'}">
           <div class="card-body">
@@ -3205,7 +3199,7 @@ ${coverPage}${pages}
       if (window.DB && DB.isOnline()) {
         const res = await DB.createApplication(req);
         if (!res || !res.ok) { toast((res && res.error) || 'تعذر حفظ الطلب على الخادم', 'err'); return; }
-        await notifyUser(req.advisorUsername, `طلب حذف أو إضافة مقررات جديد من ${req.studentName}: ${req.id}`, { title: 'طلب جديد', type: 'info' });
+        await notifyRoute(req, `طلب حذف أو إضافة مقررات جديد من ${req.studentName}: ${req.id}`, { title: 'طلب جديد', type: 'info' });
       } else {
         // Persist the actual attachment in IndexedDB and keep only its metadata in localStorage.
         if (Array.isArray(req.transcripts) && req.transcripts.length) {
@@ -3219,7 +3213,7 @@ ${coverPage}${pages}
         const requests = load('requests', []);
         requests.unshift(req);
         save('requests', requests);
-        await notifyUser(req.advisorUsername, `طلب حذف أو إضافة مقررات جديد من ${req.studentName}: ${req.id}`, { title: 'طلب جديد', type: 'info' });
+        await notifyRoute(req, `طلب حذف أو إضافة مقررات جديد من ${req.studentName}: ${req.id}`, { title: 'طلب جديد', type: 'info' });
       }
       try {
         const compactReq = Object.assign({}, req);
@@ -3518,7 +3512,7 @@ ${coverPage}${pages}
   function academicRequestUpdateTotals(){const total=academicRequestRows.reduce((n,r)=>n+Number(r.hours||0),0);const el=document.getElementById('ar-total-hours');if(el)el.textContent='إجمالي الساعات: '+total;}
   function academicRequestBuildReview(){const d=academicRequestStudentData();const def=academicRequestDefinitions[currentFormType];const total=academicRequestRows.reduce((n,r)=>n+Number(r.hours||0),0);const rows=academicRequestRows.map((r,i)=>`<tr><td>${i+1}</td><td>${arEsc(r.name)}</td><td>${arEsc(r.code)}</td><td>${r.hours}</td>${currentFormType==='concurrent'?`<td>${arEsc(r.prerequisites||'—')}</td><td>تحتاج إلى مراجعة</td>`:''}</tr>`).join('');const kind=document.getElementById('ar-increase-kind');const more=currentFormType==='increase'?`<p><b>نوع الزيادة:</b> ${arEsc(kind?.selectedOptions[0]?.textContent||'—')}</p>`:currentFormType==='gpa'?`<p><b>الحد الأقصى:</b> 12 ساعة معتمدة — <b>المختار:</b> ${total} ساعة</p>`:'';const box=document.getElementById('ar-review-summary');if(box)box.innerHTML=`<div class="ad-review-card"><h4>بيانات الطالب</h4><p><b>الاسم:</b> ${arEsc(d.name)}　 <b>الكود:</b> ${arEsc(d.code)}</p><p><b>المستوى:</b> ${arEsc(document.getElementById('ar-level')?.value)}　 <b>البرنامج:</b> ${arEsc(d.program||'غير متاح')}</p><p><b>العام:</b> ${arEsc(document.getElementById('ar-year')?.value)}　 <b>الفصل:</b> ${arEsc(document.getElementById('ar-semester')?.value)}</p>${more}<h4 class="mt-3">المقررات</h4><div class="table-responsive"><table class="data"><thead><tr><th>#</th><th>المقرر</th><th>الكود</th><th>الساعات</th>${currentFormType==='concurrent'?'<th>المتطلب السابق</th><th>الحالة</th>':''}</tr></thead><tbody>${rows}</tbody></table></div><p><b>إجمالي الساعات المختارة:</b> ${total}</p><p><b>ملاحظات الطالب:</b> ${arEsc(document.getElementById('ar-student-notes')?.value||'—')}</p><p class="text-muted text-xs">سيُرسل الطلب إلى مسار المراجعة الحالي. لم يتم تنفيذ التسجيل الأكاديمي بهذه الخطوة.</p></div>`;}
   async function academicRequestSubmit(){if(!currentUser||currentUser.role!=='student')return toast('لا تملك صلاحية تقديم هذا الطلب','err');if(!document.getElementById('ar-final-confirm')?.checked)return toast('يرجى تأكيد الإقرار قبل الإرسال','err');const btn=document.getElementById('ar-submit');if(btn){btn.disabled=true;btn.classList.add('is-loading');}const d=academicRequestStudentData();const def=academicRequestDefinitions[currentFormType];const now=new Date().toISOString();const kind=document.getElementById('ar-increase-kind')?.value||null;const total=academicRequestRows.reduce((n,r)=>n+Number(r.hours||0),0);const notes=(document.getElementById('ar-student-notes')?.value||'').trim();const courses=academicRequestRows.map(r=>({name:r.name.trim(),code:r.code.trim(),hours:Number(r.hours),prerequisites:r.prerequisites||'',action:'register',academicChecks:r.checks}));const req={id:'REQ-'+Date.now(),type:currentFormType,formTitle:def.title,studentName:d.name,studentCode:d.code,level:document.getElementById('ar-level').value,program:d.program,year:document.getElementById('ar-year').value,semester:document.getElementById('ar-semester').value,phone:d.phone,completedHours:d.completedHours,registeredHours:d.registeredHours,courses,studentNotes:[notes,`إجمالي الساعات المطلوبة: ${total}`,kind?`نوع زيادة العبء: ${kind}`:''].filter(Boolean).join('\n'),academicRequest:{kind,totalHours:total,gpa:d.gpa,completedHours:d.completedHours,registeredHours:d.registeredHours,eligibilityReview:(d.gpa===null||d.completedHours===null||d.registeredHours===null)?'needs_review':'review_required',prerequisitesReview:'needs_review',conflictReview:'needs_review',concurrencyReview:'needs_review',sectionStatusReview:'needs_review',studentDeclaration:true,submittedAt:now,advisorRecommendation:null,reviewNotes:[],executionDate:null},declarationAccepted:true,createdAt:now,status:'pending_advisor',currentStep:0,history:[{step:'submit',by:d.name||'الطالب',role:'student',action:'submit',note:notes,at:now}],advisorUsername:d.code?(currentUser.advisor||load('assignments',{})[d.code]||null):null};
-    try{if(window.DB&&DB.isOnline()){const res=await DB.createApplication(req);if(!res||!res.ok)throw new Error(res?.error||'تعذر حفظ الطلب على الخادم');await notifyUser(req.advisorUsername,`طلب جديد: ${req.formTitle} — ${req.studentName}`,{title:'طلب أكاديمي جديد',type:'info'});}else{const requests=load('requests',[]);requests.unshift(req);save('requests',requests);await notifyUser(req.advisorUsername,`طلب جديد: ${req.formTitle} — ${req.studentName}`,{title:'طلب أكاديمي جديد',type:'info'});}const root=document.getElementById('view-form-fill');root.innerHTML=`<div class="ad-success-card"><div class="ad-success-mark"><i class="fas fa-check"></i></div><div class="fw-extrabold">تم إرسال الطلب للمراجعة</div><p>تم حفظ طلبك وإرساله إلى مسار المراجعة. لم يتم تسجيل المقررات أو تغيير العبء أو المعدل الأكاديمي تلقائيًا.</p><div class="ad-reference"><small>الرقم المرجعي للطلب</small><strong>${arEsc(req.id)}</strong></div><div class="flex gap-2 justify-center flex-wrap"><button type="button" class="btn btn-primary" onclick="App.navigate('my-requests')">متابعة طلباتي</button><button type="button" class="btn btn-outline" onclick="App.navigate('forms-list')">العودة للنماذج</button></div></div>`;toast('تم تقديم الطلب بنجاح — '+req.id);}catch(err){console.error(err);toast(err.message||'حدث خطأ أثناء حفظ الطلب','err');if(btn){btn.disabled=false;btn.classList.remove('is-loading');}}
+    try{if(window.DB&&DB.isOnline()){const res=await DB.createApplication(req);if(!res||!res.ok)throw new Error(res?.error||'تعذر حفظ الطلب على الخادم');await notifyRoute(req,`طلب جديد: ${req.formTitle} — ${req.studentName}`,{title:'طلب أكاديمي جديد',type:'info'});}else{const requests=load('requests',[]);requests.unshift(req);save('requests',requests);await notifyRoute(req,`طلب جديد: ${req.formTitle} — ${req.studentName}`,{title:'طلب أكاديمي جديد',type:'info'});}const root=document.getElementById('view-form-fill');root.innerHTML=`<div class="ad-success-card"><div class="ad-success-mark"><i class="fas fa-check"></i></div><div class="fw-extrabold">تم إرسال الطلب للمراجعة</div><p>تم حفظ طلبك وإرساله إلى مسار المراجعة. لم يتم تسجيل المقررات أو تغيير العبء أو المعدل الأكاديمي تلقائيًا.</p><div class="ad-reference"><small>الرقم المرجعي للطلب</small><strong>${arEsc(req.id)}</strong></div><div class="flex gap-2 justify-center flex-wrap"><button type="button" class="btn btn-primary" onclick="App.navigate('my-requests')">متابعة طلباتي</button><button type="button" class="btn btn-outline" onclick="App.navigate('forms-list')">العودة للنماذج</button></div></div>`;toast('تم تقديم الطلب بنجاح — '+req.id);}catch(err){console.error(err);toast(err.message||'حدث خطأ أثناء حفظ الطلب','err');if(btn){btn.disabled=false;btn.classList.remove('is-loading');}}
   }
 
   function openForm(type) {
@@ -3686,12 +3680,12 @@ ${coverPage}${pages}
     if (window.DB && DB.isOnline()) {
       const res = await DB.createApplication(req);
       if (!res.ok) return toast(res.error || 'فشل حفظ الطلب', 'err');
-      await notifyUser(req.advisorUsername, `طلب جديد من ${req.studentName}: ${req.formTitle}`, { title: 'طلب جديد', type: 'info' });
+      await notifyRoute(req, `طلب جديد من ${req.studentName}: ${req.formTitle}`, { title: 'طلب جديد', type: 'info' });
     } else {
       const requests = load('requests', []);
       requests.unshift(req);
       save('requests', requests);
-      await notifyUser(req.advisorUsername, `طلب جديد من ${req.studentName}: ${req.formTitle}`, { title: 'طلب جديد', type: 'info' });
+      await notifyRoute(req, `طلب جديد من ${req.studentName}: ${req.formTitle}`, { title: 'طلب جديد', type: 'info' });
     }
     toast('تم تقديم الطلب بنجاح — رقم المرجع: ' + req.id);
     navigate('my-requests');
@@ -3699,7 +3693,7 @@ ${coverPage}${pages}
 
   /* ===== Notifications System ===== */
   let notifAudioContext = null;
-  function isNotifSoundEnabled() { return load('notification-sound-enabled', false) === true; }
+  function isNotifSoundEnabled() { return load('notification-sound-enabled', true) !== false; }
   function playNotifSound(force = false) {
     if (!force && !isNotifSoundEnabled()) return false;
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -3709,17 +3703,25 @@ ${coverPage}${pages}
       const ctx = notifAudioContext;
       const start = Math.max(ctx.currentTime, 0) + 0.01;
       if (ctx.state === 'suspended') ctx.resume();
-      [[880, 0], [1174.66, 0.11]].forEach(([frequency, offset]) => {
+      const tone = load('notification-tone', 'chime');
+      const T = {
+        chime: [[523.25, 0, .5], [659.25, 0.13, .5], [783.99, 0.26, .75]],
+        bell: [[880, 0, 1.1], [1318.5, 0, .8], [1760, 0, .5]],
+        drop: [[1200, 0, .16], [700, 0.12, .3]],
+        soft: [[440, 0, .45], [554.37, 0.2, .6]]
+      };
+      (T[tone] || T.chime).forEach(([frequency, offset, dur]) => {
         const oscillator = ctx.createOscillator();
         const gain = ctx.createGain();
-        oscillator.type = 'sine';
+        oscillator.type = tone === 'chime' ? 'triangle' : 'sine';
         oscillator.frequency.setValueAtTime(frequency, start + offset);
+        if (tone === 'drop') oscillator.frequency.exponentialRampToValueAtTime(frequency * 0.6, start + offset + dur);
         gain.gain.setValueAtTime(0.0001, start + offset);
-        gain.gain.exponentialRampToValueAtTime(0.12, start + offset + 0.018);
-        gain.gain.exponentialRampToValueAtTime(0.0001, start + offset + 0.22);
+        gain.gain.exponentialRampToValueAtTime(tone === 'bell' ? 0.07 : 0.1, start + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + offset + dur);
         oscillator.connect(gain).connect(ctx.destination);
         oscillator.start(start + offset);
-        oscillator.stop(start + offset + 0.24);
+        oscillator.stop(start + offset + dur + 0.05);
       });
       return true;
     } catch (error) { console.warn('تعذر تشغيل نغمة الإشعار', error); return false; }
@@ -3776,6 +3778,13 @@ ${coverPage}${pages}
     }
   }
 
+  async function notifyRoute(req, text, opts) {
+    if (req && req.advisorUsername) return notifyRoute(req, text, opts);
+    const users = load('users', []);
+    let targets = users.filter(u => u.role === 'advisor');
+    if (!targets.length) targets = users.filter(u => ['manager', 'vice', 'dean', 'admin'].includes(u.role));
+    for (const u of targets) await notifyUser(u.username, text, opts);
+  }
   async function notifyUser(to, text, opts) {
     opts = opts || {};
     pushNotif(to, text, opts);
@@ -3879,23 +3888,34 @@ ${coverPage}${pages}
   }
 
 
+  function wfLevel(role) {
+    if (role === 'admin') return S.workflow.length - 1;
+    return S.workflow.findIndex(w => w.role === role);
+  }
+  function wfLabel(i) { return S.workflow[i] ? S.workflow[i].label : ''; }
   function statusInfo(r) {
     if (r.status === 'rejected') return { label: 'مرفوض', cls: 'badge-red' };
-    if (r.status === 'executed') return { label: 'تم التنفيذ', cls: 'badge-green' };
+    if (r.status === 'executed') return { label: r.finalBy ? 'اعتمده ' + r.finalBy : 'تم الاعتماد', cls: 'badge-green' };
     const step = S.workflow[r.currentStep];
     return step ? { label: 'لدى: ' + step.label, cls: 'badge-blue' } : { label: 'قيد المعالجة', cls: 'badge-amber' };
   }
 
   function progressHTML(r) {
-    const steps = [{ label: 'تقديم' }, ...S.workflow.map(w => ({ label: w.label }))];
+    const skipped = {};
+    (r.skipped || []).forEach(x => { skipped[x.key] = x; });
+    const steps = [{ label: 'تقديم', key: '_s' }, ...S.workflow.map(w => ({ label: w.label, key: w.key }))];
     let h = '<div class="steps">';
-    steps.forEach((s, i) => {
+    steps.forEach((s0, i) => {
       let cls = 'pending';
-      if (r.status === 'rejected') cls = i <= r.currentStep + 1 ? (i === r.currentStep + 1 ? 'rejected' : 'done') : 'pending';
+      const wi = i - 1;
+      if (i === 0) cls = 'done';
+      else if (skipped[s0.key]) cls = 'skip';
+      else if (r.status === 'rejected') cls = wi < r.currentStep ? 'done' : wi === r.currentStep ? 'rejected' : 'pending';
       else if (r.status === 'executed') cls = 'done';
-      else { if (i < r.currentStep + 1) cls = 'done'; else if (i === r.currentStep + 1) cls = 'current'; }
-      if (i > 0) h += `<div class="step-line ${cls === 'done' || r.status === 'executed' ? 'done' : ''}"></div>`;
-      h += `<div class="step"><div class="step-dot ${cls}">${cls === 'done' ? '✓' : cls === 'rejected' ? '✕' : i + 1}</div><div class="step-lbl">${s.label}</div></div>`;
+      else cls = wi < r.currentStep ? 'done' : wi === r.currentStep ? 'current' : 'pending';
+      if (i > 0) h += `<div class="step-line ${cls === 'done' || cls === 'skip' || r.status === 'executed' ? 'done' : ''}"></div>`;
+      const sub = cls === 'skip' ? `<div class="step-sub">اعتمد ${skipped[s0.key].byLabel}</div>` : '';
+      h += `<div class="step"><div class="step-dot ${cls}">${cls === 'done' ? '✓' : cls === 'rejected' ? '✕' : cls === 'skip' ? '–' : i + 1}</div><div class="step-lbl${cls === 'skip' ? ' step-skip' : ''}">${s0.label}</div>${sub}</div>`;
     });
     return h + '</div>';
   }
@@ -3925,8 +3945,8 @@ ${coverPage}${pages}
     if (r.status === 'rejected' || r.status === 'executed') return false;
     const step = S.workflow[r.currentStep];
     if (!step) return false;
-    if (currentUser.role === 'dean' || currentUser.role === 'admin') return true;
-    if (step.role !== currentUser.role) return false;
+    const me = wfLevel(currentUser.role);
+    if (me < 0 || me < r.currentStep) return false;
     if (currentUser.role === 'advisor') return !r.advisorUsername || r.advisorUsername === currentUser.username;
     return true;
   }
@@ -3979,6 +3999,7 @@ ${coverPage}${pages}
         <span class="badge ${st.cls}">${st.label}</span>
       </div>
       ${progressHTML(r)}
+      ${(r.skipped && r.skipped.length) ? `<div class="alert alert-info mt-3"><i class="fas fa-circle-info"></i> اعتمد ${arEsc(r.skipped[0].byLabel)} هذا الطلب مباشرة، فأُلغي المطلوب من: ${r.skipped.map(x => arEsc(wfLabel(S.workflow.findIndex(w => w.key === x.key)))).join('، ')}.</div>` : ''}
       <div class="grid-3 mt-3 text-sm">
         <div><span class="text-muted">الطالب:</span> <b>${r.studentName}</b></div>
         <div><span class="text-muted">الكود:</span> <b>${r.studentCode}</b></div>
@@ -4018,32 +4039,50 @@ ${coverPage}${pages}
       r = requests[idx];
     }
     if (!r) return toast('الطلب غير موجود', 'err');
+    if (!canAction(r)) return toast('لا يلزم اعتماد منك على هذا الطلب', 'err');
     const step = S.workflow[r.currentStep];
+    const me = wfLevel(currentUser.role);
+    const roleLabel = roleName(currentUser.role);
     if (!r.history) r.history = [];
     r.history.push({ step: step?.key, by: currentUser.name, role: currentUser.role, action, note, at: new Date().toISOString() });
+    const notifyStudent = async (text, o) => {
+      await notifyUser(r.studentCode, text, o);
+      if (r.studentUsername && r.studentUsername !== r.studentCode) await notifyUser(r.studentUsername, text, o);
+    };
     if (action === 'reject') {
       r.status = 'rejected';
-      await notifyUser(r.studentCode, `تم رفض طلبك (${r.formTitle}): ${note}`, { title: 'رفض الطلب', type: 'error', link: 'my-requests' });
-      if (r.studentUsername && r.studentUsername !== r.studentCode)
-        await notifyUser(r.studentUsername, `تم رفض طلبك (${r.formTitle}): ${note}`, { title: 'رفض الطلب', type: 'error' });
+      r.rejectedBy = roleLabel;
+      await notifyStudent(`تم رفض طلبك (${r.formTitle}) من ${roleLabel}: ${note}`, { title: 'رفض الطلب', type: 'error', link: 'my-requests' });
     } else {
-      if (step && step.role === 'affairs') {
+      // اعتماد جهة أعلى يلغي المطلوب من الجهات الأدنى في المسار
+      if (me > r.currentStep) {
+        r.skipped = r.skipped || [];
+        for (let i = r.currentStep; i < me; i++) r.skipped.push({ key: S.workflow[i].key, by: currentUser.name, byRole: currentUser.role, byLabel: roleLabel });
+      }
+      r.approvals = r.approvals || [];
+      r.approvals.push({ key: S.workflow[me].key, by: currentUser.name, role: currentUser.role, at: new Date().toISOString() });
+      if (me >= S.workflow.length - 1) {
         r.status = 'executed';
+        r.finalBy = roleLabel;
+        r.currentStep = S.workflow.length;
         r.history[r.history.length - 1].action = 'execute';
-        await notifyUser(r.studentCode, `تم تنفيذ طلبك (${r.formTitle}) بنجاح على النظام الأكاديمي`, { title: 'تم التنفيذ', type: 'success', link: 'my-requests' });
-        if (r.studentUsername && r.studentUsername !== r.studentCode)
-          await notifyUser(r.studentUsername, `تم تنفيذ طلبك (${r.formTitle})`, { title: 'تم التنفيذ', type: 'success' });
+        await notifyStudent(`تم اعتماد طلبك (${r.formTitle}) نهائيًا من ${roleLabel}`, { title: 'تم اعتماد الطلب', type: 'success', link: 'my-requests' });
       } else {
-        r.currentStep += 1;
-        r.status = r.currentStep >= S.workflow.length ? 'executed' : 'pending_' + S.workflow[r.currentStep].key;
-        const roleLabel = roleName(currentUser.role);
-        await notifyUser(r.studentCode, `تم اعتماد طلبك (${r.formTitle}) من ${roleLabel} — انتقل للمرحلة التالية`, { title: 'اعتماد الطلب', type: 'success', link: 'my-requests' });
-        if (r.studentUsername && r.studentUsername !== r.studentCode)
-          await notifyUser(r.studentUsername, `تم اعتماد طلبك من ${roleLabel}`, { title: 'اعتماد الطلب', type: 'success' });
-        // إشعار للمرحلة التالية (إن أمكن)
+        r.currentStep = me + 1;
+        r.status = 'pending_' + S.workflow[r.currentStep].key;
+        await notifyStudent(`تم اعتماد طلبك (${r.formTitle}) من ${roleLabel} وانتقل إلى: ${S.workflow[r.currentStep].label}`, { title: 'اعتماد الطلب', type: 'success', link: 'my-requests' });
         const next = S.workflow[r.currentStep];
-        if (next && next.role === 'advisor' && r.advisorUsername)
-          await notifyUser(r.advisorUsername, `طلب بانتظار مراجعتك: ${r.formTitle} — ${r.studentName}`, { title: 'طلب للمراجعة', type: 'info' });
+        const targets = load('users', []).filter(u => u.role === next.role);
+        for (const u of targets) await notifyUser(u.username, `طلب بانتظار اعتمادك: ${r.formTitle} — ${r.studentName}`, { title: 'طلب للمراجعة', type: 'info' });
+      }
+      // أخبر الجهات الأدنى التي أُلغي دورها
+      if (r.skipped && r.skipped.length) {
+        const users = load('users', []);
+        for (const sk of r.skipped.filter(x => x.byRole === currentUser.role)) {
+          const lowRole = S.workflow.find(w => w.key === sk.key)?.role;
+          const lowUsers = users.filter(u => u.role === lowRole && (lowRole !== 'advisor' || !r.advisorUsername || u.username === r.advisorUsername));
+          for (const u of lowUsers) await notifyUser(u.username, `${roleLabel} اعتمد الطلب (${r.formTitle} — ${r.studentName}) مباشرة، ولا يلزم إجراء منك.`, { title: 'اعتماد من جهة أعلى', type: 'info' });
+        }
       }
     }
     const histEntry = r.history[r.history.length - 1];
@@ -4599,25 +4638,16 @@ ${coverPage}${pages}
             <div class="text-xs text-muted">ملف PDF — يُضاف عند توفّره</div>
           </div>
         </div>
-        <div class="card" style="cursor:pointer" onclick="toast('الساعات المكتبية: ارفع ملف Excel من لوحة الإدارة')">
+        <div class="card" style="cursor:pointer" onclick="AdvFaculty.showOfficeHours()">
           <div class="card-body">
             <div class="fw-extrabold mb-1"><i class="fas fa-clock" style="color:var(--navy)"></i> الساعات المكتبية</div>
             <div class="text-xs text-muted">جدول أعضاء هيئة التدريس</div>
           </div>
         </div>
-        <div class="card" style="cursor:pointer" onclick="App.navigate('study-plan')">
-          <div class="card-body">
-            <div class="fw-extrabold mb-1"><i class="fas fa-sitemap" style="color:#7c3aed"></i> الخطط الدراسية</div>
-            <div class="text-xs text-muted">الأقسام والبرامج والمقررات</div>
-          </div>
-        </div>
       </div>
       <div class="card mt-3"><div class="card-header"><span class="fw-bold">منسقو الإرشاد بالأقسام</span></div>
         <div class="card-body">
-          ${(S.org.coordinators||[]).map(c => {
-            const d = S.departments.find(x => x.id === c.dept);
-            return `<div class="list-item" style="cursor:default"><div><b>${c.name}</b><div class="text-xs text-muted">${d?d.nameAr:c.dept}</div></div></div>`;
-          }).join('')}
+          ${window.AdvFaculty ? AdvFaculty.coordinatorsHtml() : ''}
         </div>
       </div>`;
   }
@@ -4945,7 +4975,7 @@ ${coverPage}${pages}
     return { ok: true };
   }
   window.App = {
-    showHome,
+    showHome, toast, renderUsersMgmt, renderNotifications, updateNotifSoundControl, playNotifSound,
     showAuth,
     notifyUser,
     updateNotifBadge,
@@ -4978,7 +5008,7 @@ ${coverPage}${pages}
     toggleFormsCategory, addDropContinueFromInstructions, addDropBack,
     addAddDropRow: addDropRow, onAddDropCoursePick, removeAddDropRow,
     addDropValidateData, addDropValidateCourses, updateAddDropPrograms, submitAddDrop, saveAddDropDraft, printAddDropRequest, printAddDropCurrent,
-    viewRequest, process, goBackDetail,
+    viewRequest, process, goBackDetail, loadStore: load, saveStore: save, statusInfo, progressHTML, canAction, wfLevel, notifyRoute, roleName, loadRoles,
     addGPARow, updateGPAPreview, gpaSetMode, gpaExcelPick, gpaExcelApply, gpaExcelClear, gpaSelectSection, gpaSelectProgram, gpaAddTerm, gpaRemoveTerm, gpaTermChange, gpaDraftChange, gpaCommitCourse, gpaRemoveCourse, gpaAddAcademicYear, gpaRemoveAcademicYear,
     togglePeriod, assignOne, bulkAssign,
     changePassword, doStudentSearch, showStudentDetail, exportPDF,
