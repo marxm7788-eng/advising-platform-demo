@@ -2642,11 +2642,14 @@ ${coverPage}${pages}
   function gpaExcelPick(input) {
     const file = input && input.files && input.files[0];
     if (!file) return;
+    const isCsv = /\.csv$/i.test(file.name || '');
     const reader = new FileReader();
     reader.onerror = () => { _gpaImport = { error: 'تعذر قراءة الملف، حاول مرة أخرى.' }; renderGPACalc(); };
     reader.onload = (e) => {
       try {
-        const wb = XLSX.read(e.target.result, { type: 'array' });
+        let data = e.target.result;
+        if (isCsv && typeof data === 'string' && data.charCodeAt(0) === 0xFEFF) data = data.slice(1);
+        const wb = XLSX.read(data, { type: isCsv ? 'string' : 'array' });
         const ws = wb.Sheets[wb.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' });
         const parsed = gpaParseExcelRows(rows);
@@ -2656,7 +2659,8 @@ ${coverPage}${pages}
       }
       renderGPACalc();
     };
-    reader.readAsArrayBuffer(file);
+    if (isCsv) reader.readAsText(file, 'UTF-8');
+    else reader.readAsArrayBuffer(file);
   }
 
   function gpaExcelApply() {
