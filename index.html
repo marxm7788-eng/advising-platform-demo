@@ -20,11 +20,11 @@
 
   <link rel="stylesheet" href="vendor/fontawesome/css/60-all.min.css" />
   <link rel="stylesheet" href="css/17-design-system.css" />
-  <link rel="stylesheet" href="css/18-landing.css" />
+  <link rel="stylesheet" href="css/18-landing.css?v=20261125" />
   <link rel="stylesheet" href="css/21-student-voice.css" />
   <link rel="stylesheet" href="css/19-local-backup.css" />
   <link rel="stylesheet" href="css/22-support-messaging.css" />
-  <link rel="stylesheet" href="css/23-theme.css" />
+  <link rel="stylesheet" href="css/23-theme.css?v=20261125" />
   <link rel="stylesheet" href="css/20-polish.css" />
 </head>
 <body>
@@ -60,7 +60,7 @@
 
       <!-- ===== HOME SCREEN (full) ===== -->
       <div id="lp-home" class="lp-home">
-        <div id="landing-environment-notice" class="environment-notice environment-notice-landing" role="status"></div>
+        <div id="landing-environment-notice" class="environment-notice environment-notice-landing" role="status" hidden></div>
         <div class="lp-home-inner">
           <div class="hero-kicker" id="hero-sub">جامعة سوهاج</div>
           <h1 class="hero-title" id="hero-title">المنصة الرقمية<br/><span class="accent">لكلية العلوم</span></h1>
@@ -98,7 +98,7 @@
               </div>
               <img src="assets/8-faculty-logo.png" alt="" />
             </div>
-            <div id="auth-environment-notice" class="environment-notice environment-notice-auth" role="status"></div>
+            <div id="auth-environment-notice" class="environment-notice environment-notice-auth" role="status" hidden></div>
             <div class="auth-tabs">
               <button type="button" id="tab-login" class="active" onclick="App.switchTab('login')">تسجيل الدخول</button>
               <button type="button" id="tab-register" onclick="App.switchTab('register')">تسجيل طالب جديد</button>
@@ -124,9 +124,9 @@
               <div class="form-group"><label>الاسم بالكامل</label><input class="form-control" id="reg-name" required placeholder="الاسم رباعي" autocomplete="name" /></div>
               <div class="form-group"><label>كود الطالب</label><input class="form-control" id="reg-code" required placeholder="أدخل كود الطالب" inputmode="numeric" pattern="[0-9]+" autocomplete="off" /></div>
               <div class="form-group password-strength-group"><label for="reg-password">كلمة المرور</label><input class="form-control" id="reg-password" type="password" required minlength="4" placeholder="أنشئ كلمة مرور قوية" autocomplete="new-password" aria-describedby="password-strength-text" />
-                <div class="password-strength" aria-live="polite"><div class="password-strength-track"><span id="password-strength-bar"></span></div><div class="password-strength-meta"><span id="password-strength-text">أدخل كلمة المرور لتقييم قوتها</span><span id="password-strength-percent">0%</span></div></div>
+                <div class="password-strength" aria-live="polite"><div class="password-strength-track"><span id="password-strength-bar"></span></div><div class="password-strength-meta"><span id="password-strength-text"></span><span id="password-strength-percent"></span></div></div>
               </div>
-              <div class="form-group password-confirm-group"><label for="reg-password-confirm">إعادة إدخال كلمة المرور</label><input class="form-control" id="reg-password-confirm" type="password" required minlength="4" placeholder="أعد إدخال كلمة المرور" autocomplete="new-password" aria-describedby="password-match-text" /><div id="password-match-text" class="password-match-text" aria-live="polite">أعد كتابة كلمة المرور للتأكيد</div></div>
+              <div class="form-group password-confirm-group"><label for="reg-password-confirm">تأكيد كلمة المرور</label><input class="form-control" id="reg-password-confirm" type="password" required minlength="4" placeholder="أعد كتابة كلمة المرور" autocomplete="new-password" aria-describedby="password-match-text" /><div id="password-match-text" class="password-match-text" aria-live="polite"></div></div>
               <div class="form-group"><label>رقم الهاتف</label><input class="form-control" id="reg-phone" required placeholder="01xxxxxxxxx" pattern="01[0-9]{9}" maxlength="11" inputmode="numeric" /></div>
               <button type="submit" class="btn btn-teal btn-block btn-login-main">إنشاء حساب</button>
             </form>
@@ -184,7 +184,7 @@
                 <time class="portal-clock-time" id="portal-clock-time" dir="ltr"></time>
               </span>
             </div>
-            <span id="app-environment-pill" class="environment-pill" role="status"></span>
+            <span id="app-environment-pill" class="environment-pill" role="status" hidden></span>
             <button type="button" class="theme-toggle-btn" id="theme-toggle-app" aria-label="تفعيل الوضع الداكن" aria-pressed="false" title="تفعيل الوضع الداكن">
               <i class="fas fa-moon" aria-hidden="true"></i><span class="sr-only">تفعيل الوضع الداكن</span>
             </button>
@@ -196,7 +196,7 @@
         </header>
 
         <main class="content">
-          <div id="app-environment-notice" class="environment-notice" role="status"></div>
+          <div id="app-environment-notice" class="environment-notice" role="status" hidden></div>
           <!-- System Administrator Hub -->
           <div id="view-admin-dashboard" class="view hidden">
             <section class="admin-hub-intro anim-fade-up">
@@ -206,28 +206,38 @@
               <div class="admin-hub-user"><span class="admin-hub-avatar"><i class="fas fa-user-shield"></i></span><span><b id="admin-hub-name">مدير النظام</b><small>تحكم مركزي في منصة كلية العلوم</small></span></div>
             </section>
             <div class="admin-hub-summary" aria-label="ملخص مركز مدير النظام">
-              <div><span class="admin-summary-icon"><i class="fas fa-layer-group"></i></span><span><b>11</b><small>مساحات عمل</small></span></div>
+              <div><span class="admin-summary-icon"><i class="fas fa-layer-group"></i></span><span><b>13</b><small>مساحة عمل</small></span></div>
               <div><span class="admin-summary-icon"><i class="fas fa-key"></i></span><span><b>كامل</b><small>نطاق الصلاحيات</small></span></div>
               <div><span class="admin-summary-icon"><i class="fas fa-diagram-project"></i></span><span><b>مركزي</b><small>إدارة المنصة</small></span></div>
             </div>
-            <div class="admin-hub-section-title"><div><h2>مساحات العمل</h2><p>انتقل مباشرة إلى الشاشة أو الوظيفة المطلوبة</p></div><span class="admin-hub-access"><i class="fas fa-check-circle"></i> وصول شامل</span></div>
+                        <div class="admin-hub-section-title"><div><h2>المتابعة والإشراف</h2><p>نظرة شاملة على الأداء الأكاديمي ومساحات الأدوار</p></div><span class="admin-hub-access"><i class="fas fa-check-circle"></i> وصول شامل</span></div>
             <div class="admin-hub-grid">
-              <button class="admin-hub-card admin-hub-primary" onclick="App.navigate('roles-mgmt')"><span class="admin-hub-icon"><i class="fas fa-sliders-h"></i></span><span class="admin-hub-card-title">الأدوار والصلاحيات</span><span class="admin-hub-card-desc">ضبط الوصول لكل دور وإدارة الأذونات المعتمدة.</span><span class="admin-hub-card-link">فتح إدارة الأدوار <i class="fas fa-arrow-left"></i></span></button>
-              <button class="admin-hub-card" onclick="App.navigate('talent-admin')"><span class="admin-hub-icon academic"><i class="fas fa-star"></i></span><span class="admin-hub-card-title">دعم الموهوبين</span><span class="admin-hub-card-desc">مراجعة طلبات التسجيل في برنامج دعم الموهوبين وتحديث حالاتها.</span><span class="admin-hub-card-link">فتح لوحة الموهوبين <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card" onclick="App.navigate('dean-dashboard')"><span class="admin-hub-icon dean"><i class="fas fa-chart-pie"></i></span><span class="admin-hub-card-title">شاشة العميد</span><span class="admin-hub-card-desc">لوحة المؤشرات والمتابعة والإشراف على الأداء الأكاديمي والإداري.</span><span class="admin-hub-card-link">فتح لوحة العميد <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card" onclick="App.navigate('student-dashboard')"><span class="admin-hub-icon student"><i class="fas fa-user-graduate"></i></span><span class="admin-hub-card-title">شاشة الطالب</span><span class="admin-hub-card-desc">معاينة مساحة الطالب وخدماته وخطته الدراسية والنماذج والطلبات.</span><span class="admin-hub-card-link">فتح شاشة الطالب <i class="fas fa-arrow-left"></i></span></button>
+            </div>
+            <div class="admin-hub-section-title"><div><h2>الطلبات والخدمات</h2><p>متابعة الطلبات الواردة والنماذج وبرامج الدعم</p></div></div>
+            <div class="admin-hub-grid">
               <button class="admin-hub-card" onclick="App.navigate('staff-inbox')"><span class="admin-hub-icon requests"><i class="fas fa-inbox"></i></span><span class="admin-hub-card-title">الطلبات وسير العمل</span><span class="admin-hub-card-desc">متابعة الطلبات الواردة ومراجعة الإجراءات وحالات التنفيذ.</span><span class="admin-hub-card-link">إدارة الطلبات <i class="fas fa-arrow-left"></i></span></button>
+              <button class="admin-hub-card" onclick="App.navigate('forms-list')"><span class="admin-hub-icon forms"><i class="fas fa-file-alt"></i></span><span class="admin-hub-card-title">النماذج والطلبات</span><span class="admin-hub-card-desc">استعراض النماذج الإلكترونية ومسار تقديم الطلبات.</span><span class="admin-hub-card-link">فتح النماذج <i class="fas fa-arrow-left"></i></span></button>
+              <button class="admin-hub-card" onclick="App.navigate('talent-admin')"><span class="admin-hub-icon academic"><i class="fas fa-star"></i></span><span class="admin-hub-card-title">دعم الموهوبين</span><span class="admin-hub-card-desc">مراجعة طلبات التسجيل في برنامج دعم الموهوبين وتحديث حالاتها.</span><span class="admin-hub-card-link">فتح لوحة الموهوبين <i class="fas fa-arrow-left"></i></span></button>
+            </div>
+            <div class="admin-hub-section-title"><div><h2>الطلاب والإرشاد</h2><p>بيانات الطلاب وإسناد المرشدين والأعوام الجامعية</p></div></div>
+            <div class="admin-hub-grid">
               <button class="admin-hub-card" onclick="App.navigate('students-mgmt')"><span class="admin-hub-icon students"><i class="fas fa-users"></i></span><span class="admin-hub-card-title">إدارة الطلاب</span><span class="admin-hub-card-desc">عرض بيانات الطلاب وإدارة سجلاتهم والوصول إلى البحث عن طالب.</span><span class="admin-hub-card-link">فتح إدارة الطلاب <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card" onclick="App.navigate('assignments')"><span class="admin-hub-icon advisors"><i class="fas fa-user-tie"></i></span><span class="admin-hub-card-title">إسناد المرشدين</span><span class="admin-hub-card-desc">إدارة إسناد الطلاب إلى المرشدين ومراجعة التوزيعات.</span><span class="admin-hub-card-link">إدارة الإسناد <i class="fas fa-arrow-left"></i></span></button>
-              <button class="admin-hub-card" onclick="App.navigate('forms-list')"><span class="admin-hub-icon forms"><i class="fas fa-file-alt"></i></span><span class="admin-hub-card-title">النماذج والطلبات</span><span class="admin-hub-card-desc">استعراض النماذج الإلكترونية ومسار تقديم الطلبات.</span><span class="admin-hub-card-link">فتح النماذج <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card" onclick="App.navigate('gpa-calc')"><span class="admin-hub-icon academic"><i class="fas fa-calendar-plus"></i></span><span class="admin-hub-card-title">الأعوام الجامعية</span><span class="admin-hub-card-desc">إدراج عام جامعي جديد ليظهر في حاسبة المعدل.</span><span class="admin-hub-card-link">إدارة الأعوام <i class="fas fa-arrow-left"></i></span></button>
-              <button class="admin-hub-card" onclick="App.navigate('users-mgmt')"><span class="admin-hub-icon users"><i class="fas fa-user-cog"></i></span><span class="admin-hub-card-title">المستخدمون والحسابات</span><span class="admin-hub-card-desc">متابعة الحسابات والأدوار وتفعيل المستخدمين وإدارة الوصول.</span><span class="admin-hub-card-link">إدارة المستخدمين <i class="fas fa-arrow-left"></i></span></button>
+            </div>
+            <div class="admin-hub-section-title"><div><h2>مراكز البيانات</h2><p>رفع البيانات والسجلات الدراسية والنسخ الاحتياطي</p></div></div>
+            <div class="admin-hub-grid">
               <button class="admin-hub-card" onclick="App.navigate('imports')"><span class="admin-hub-icon academic"><i class="fas fa-file-import"></i></span><span class="admin-hub-card-title">رفع بيانات الطلاب</span><span class="admin-hub-card-desc">تحديث بيانات الطلاب الأساسية وإسناد المرشدين عبر ملفات Excel.</span><span class="admin-hub-card-link">فتح مركز بيانات الطلاب <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card admin-hub-primary" onclick="App.navigate('transcripts')"><span class="admin-hub-icon academic"><i class="fas fa-file-invoice"></i></span><span class="admin-hub-card-title">رفع السجلات الدراسية</span><span class="admin-hub-card-desc">رفع سجل طالب تفصيلي مستقل بالأعوام والفصول والمقررات والتقديرات.</span><span class="admin-hub-card-link">فتح مركز السجلات <i class="fas fa-arrow-left"></i></span></button>
               <button class="admin-hub-card" onclick="App.navigate('local-backup')"><span class="admin-hub-icon academic"><i class="fas fa-box-archive"></i></span><span class="admin-hub-card-title">نسخ البيانات واستعادتها</span><span class="admin-hub-card-desc">نقل سجل المنصة ورسائل صوت الطالب والمرفقات بين الأجهزة بملف مشفّر.</span><span class="admin-hub-card-link">فتح مركز النسخ <i class="fas fa-arrow-left"></i></span></button>
             </div>
-          </div>
-
+            <div class="admin-hub-section-title"><div><h2>النظام والصلاحيات</h2><p>الحسابات والأدوار والأذونات المعتمدة</p></div></div>
+            <div class="admin-hub-grid">
+              <button class="admin-hub-card admin-hub-primary" onclick="App.navigate('roles-mgmt')"><span class="admin-hub-icon"><i class="fas fa-sliders-h"></i></span><span class="admin-hub-card-title">الأدوار والصلاحيات</span><span class="admin-hub-card-desc">ضبط الوصول لكل دور وإدارة الأذونات المعتمدة.</span><span class="admin-hub-card-link">فتح إدارة الأدوار <i class="fas fa-arrow-left"></i></span></button>
+              <button class="admin-hub-card" onclick="App.navigate('users-mgmt')"><span class="admin-hub-icon users"><i class="fas fa-user-cog"></i></span><span class="admin-hub-card-title">المستخدمون والحسابات</span><span class="admin-hub-card-desc">متابعة الحسابات والأدوار وتفعيل المستخدمين وإدارة الوصول.</span><span class="admin-hub-card-link">إدارة المستخدمين <i class="fas fa-arrow-left"></i></span></button>
+            </div>
           <div id="view-imports" class="view hidden">
             <div class="import-page-header"><div><span class="dean-section-kicker">إدارة بيانات الطلاب</span><h1>مركز رفع بيانات الطلاب</h1><p>تحديث البيانات الأساسية وإسناد المرشدين من ملفات جاهزة، بعد التحقق والمعاينة.</p></div><span class="import-admin-badge"><i class="fas fa-lock"></i> مدير النظام فقط</span></div>
             <div id="academic-import-root"></div>
@@ -552,7 +562,7 @@
   <script src="js/vendor/39-talent-program.js"></script>
   <script src="js/vendor/58-faculty-management.js"></script>
   <script src="js/vendor/33-portal-shell.js"></script>
-  <script src="js/vendor/26-app.js"></script>
+  <script src="js/vendor/26-app.js?v=20261125"></script>
   <script src="js/vendor/38-support-messaging.js"></script>
   <script src="js/vendor/36-student-voice.js"></script>
   <script src="js/vendor/35-student-voice-direct.js"></script>

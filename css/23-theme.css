@@ -469,3 +469,93 @@ html[data-theme="dark"] #users-toolbar .alert-info { color: #bfdbfe; background:
 .admin-booklet-copy{display:flex;flex:1;min-width:180px;flex-direction:column;gap:.22rem}.admin-booklet-copy b{color:#263f58;font-size:.92rem}.admin-booklet-copy span{color:#738296;font-size:.75rem;line-height:1.65}.admin-booklet-select{max-width:230px;margin:0}.admin-booklet-button{white-space:nowrap}
 @media(max-width:760px){.admin-booklet-tool{align-items:stretch;flex-wrap:wrap}.admin-booklet-copy{flex-basis:calc(100% - 60px)}.admin-booklet-select,.admin-booklet-button{max-width:none;flex:1}}
 
+
+/* تحسين مربع تسجيل الدخول في الوضع الداكن (تعديلات ٢٥ نوفمبر) */
+html[data-theme="dark"] .landing-page .login-panel {
+  background: linear-gradient(165deg, rgba(19,31,50,.94), rgba(10,19,32,.96));
+  border: 1px solid rgba(45,212,191,.22);
+  box-shadow: 0 28px 70px rgba(1,6,16,.6), inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+html[data-theme="dark"] .landing-page .login-panel-head h1 { color: #f1f6fc; }
+html[data-theme="dark"] .landing-page .login-panel-head .sub { color: #2dd4bf; }
+html[data-theme="dark"] .landing-page .login-panel-head .desc { color: #92a5bb; }
+html[data-theme="dark"] .landing-page .auth-tabs { background: rgba(255,255,255,.06); border: 1px solid rgba(148,163,184,.16); }
+html[data-theme="dark"] .landing-page .auth-tabs button { color: #9db0c6; }
+html[data-theme="dark"] .landing-page .auth-tabs button:hover { color: #d9e4f0; }
+html[data-theme="dark"] .landing-page .auth-tabs button.active {
+  background: linear-gradient(135deg, #0f766e, #14b8a6); color: #fff;
+  box-shadow: 0 6px 18px rgba(20,184,166,.35);
+}
+html[data-theme="dark"] .landing-page .login-panel .form-control:focus {
+  border-color: #2dd4bf !important; box-shadow: 0 0 0 3px rgba(45,212,191,.22);
+}
+html[data-theme="dark"] .landing-page .login-panel .input-icon i { color: #6b7d94; }
+
+/* مجموعات الشريط الجانبي القابلة للطي (تعديلات ٢٥ نوفمبر) */
+.nav-group { margin-bottom: .3rem; }
+.nav-group-toggle {
+  display: flex; align-items: center; gap: .5rem; width: 100%;
+  border: none; background: none; cursor: pointer; font-family: inherit;
+  padding: .55rem .95rem; border-radius: 8px; text-align: right;
+  color: #8ea3bc; font-size: .7rem; font-weight: 800; letter-spacing: .03em;
+  transition: color .15s, background .15s;
+}
+.nav-group-toggle:hover { color: #dbe6f3; background: rgba(255,255,255,.06); }
+.nav-group.expanded .nav-group-toggle { color: #eef4fb; }
+.nav-group-title { flex: 1; }
+.nav-group-count {
+  font-size: .62rem; font-weight: 700; color: #a9bcd2;
+  background: rgba(255,255,255,.08); border-radius: 20px; padding: .12rem .5rem;
+}
+.nav-group-chevron { font-size: .6rem; transition: transform .25s ease; }
+.nav-group.expanded .nav-group-chevron { transform: rotate(180deg); }
+.nav-group-items { overflow: hidden; max-height: 0; transition: max-height .3s ease; }
+.nav-group.expanded .nav-group-items { max-height: 820px; }
+
+/* تحسين ترويسة الشريط الجانبي (الشعار واسم المنصة) */
+#app .sidebar-brand img {
+  height: 48px; width: 48px; object-fit: contain; border-radius: 14px;
+  background: #fff; padding: 4px;
+  box-shadow: 0 6px 18px rgba(2,10,24,.35), 0 0 0 1px rgba(255,255,255,.14);
+}
+#app .sidebar-brand .title {
+  font-size: 1rem; letter-spacing: 0;
+  background: linear-gradient(90deg, #ffffff, #8fe6d6);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+#app .sidebar-brand .sub {
+  font-size: .68rem; color: #9db4cf; opacity: 1; margin-top: 3px;
+  display: flex; align-items: center; gap: .35rem;
+}
+#app .sidebar-brand .sub::before {
+  content: ""; width: 6px; height: 6px; border-radius: 2px;
+  background: #14b8a6; box-shadow: 0 0 8px rgba(20,184,166,.8);
+}
+
+/* شاشة ترحيب/وداع متحركة */
+.greet-overlay {
+  position: fixed; inset: 0; z-index: 10070; display: grid; place-items: center;
+  background: linear-gradient(135deg, #0c1e36 0%, #123250 60%, #0f766e 130%);
+  opacity: 0; pointer-events: none; transition: opacity .35s ease;
+}
+.greet-overlay.show { opacity: 1; pointer-events: auto; }
+.greet-box {
+  text-align: center; color: #fff;
+  transform: translateY(14px) scale(.94); opacity: 0;
+  transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease;
+}
+.greet-overlay.show .greet-box { transform: none; opacity: 1; }
+.greet-logo {
+  width: 84px; height: 84px; border-radius: 24px; background: #fff; padding: 8px;
+  box-shadow: 0 18px 44px rgba(0,0,0,.35); margin: 0 auto 1.1rem;
+  animation: greetPop .6s cubic-bezier(.2,.9,.3,1.3) both .1s;
+}
+@keyframes greetPop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.greet-word { font-size: 2.1rem; font-weight: 800; margin-bottom: .3rem; }
+.greet-name { font-size: 1.05rem; color: #99f0e4; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) {
+  .greet-logo { animation: none; }
+  .greet-box, .greet-overlay { transition-duration: .01ms; }
+}

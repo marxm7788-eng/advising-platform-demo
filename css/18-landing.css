@@ -271,7 +271,7 @@
 .login-panel-head {
   display: flex; align-items: center; gap: .55rem; margin-bottom: 1.15rem;
 }
-.login-panel-head img { width: 44px; height: 44px; object-fit: contain; }
+.login-panel-head img { width: 58px; height: 58px; object-fit: contain; }
 .login-panel-head .titles { flex: 1; text-align: center; }
 .login-panel-head h1 {
   font-size: 1rem; font-weight: 800; color: #0c1e36; margin: 0; line-height: 1.3;

@@ -293,11 +293,22 @@
     });
   }
 
+  function resetAuthForms() {
+    const lf = document.getElementById('login-form'); if (lf) lf.reset();
+    const rf = document.getElementById('register-form'); if (rf) rf.reset();
+    const bar = document.getElementById('password-strength-bar'); if (bar) { bar.style.width = '0%'; bar.style.background = '#cbd5e1'; }
+    const st = document.getElementById('password-strength-text'); if (st) st.textContent = '';
+    const sp = document.getElementById('password-strength-percent'); if (sp) sp.textContent = '';
+    const hint = document.getElementById('password-match-text'); if (hint) { hint.textContent = ''; hint.className = 'password-match-text'; }
+    const conf = document.getElementById('reg-password-confirm'); if (conf) { conf.classList.remove('is-match', 'is-mismatch'); conf.setCustomValidity(''); }
+  }
+
     function showHome() {
     const home = document.getElementById('lp-home');
     const auth = document.getElementById('lp-auth');
     if (home) home.classList.remove('hidden');
     if (auth) auth.classList.add('hidden');
+    resetAuthForms();
     try { history.replaceState(null, '', location.pathname + location.search); } catch(e) {}
   }
 
@@ -306,6 +317,7 @@
     const auth = document.getElementById('lp-auth');
     if (home) home.classList.add('hidden');
     if (auth) auth.classList.remove('hidden');
+    resetAuthForms();
     if (tab === 'register') switchTab('register');
     else switchTab('login');
     setTimeout(() => {
@@ -378,7 +390,8 @@
     setAuthLoading(false, 'login');
     setButtonLoading(button, false);
     toast('تم تسجيل الدخول');
-    enterApp();
+    showGreeting('hi', (currentUser && (currentUser.name || currentUser.full_name || currentUser.username)) || '');
+    window.setTimeout(enterApp, 650);
   }
 
 
@@ -402,7 +415,7 @@
       { label: 'جيدة', width: '76%', color: '#14b8a6' },
       { label: 'قوية', width: '100%', color: '#059669' }
     ];
-    if (!value) { bar.style.width = '0%'; text.textContent = 'أدخل كلمة المرور لتقييم قوتها'; percent.textContent = '0%'; bar.style.background = '#cbd5e1'; return; }
+    if (!value) { bar.style.width = '0%'; text.textContent = ''; percent.textContent = ''; bar.style.background = '#cbd5e1'; return; }
     const level = levels[Math.min(score, 4)];
     bar.style.width = level.width; bar.style.background = level.color;
     text.textContent = level.label; percent.textContent = level.width;
@@ -454,6 +467,23 @@
     enterApp();
   }
 
+  function showGreeting(kind, name, done) {
+    const old = document.getElementById('greet-overlay');
+    if (old) old.remove();
+    const ov = document.createElement('div');
+    ov.id = 'greet-overlay';
+    ov.className = 'greet-overlay';
+    ov.setAttribute('role', 'status');
+    ov.innerHTML = '<div class="greet-box"><img class="greet-logo" src="assets/8-faculty-logo.png" alt="" /><div class="greet-word">' + (kind === 'bye' ? 'وداعاً' : 'أهلاً') + '</div>' + (name ? '<div class="greet-name">' + arEsc(name) + '</div>' : '') + '</div>';
+    document.body.appendChild(ov);
+    requestAnimationFrame(() => ov.classList.add('show'));
+    window.setTimeout(() => {
+      ov.classList.remove('show');
+      window.setTimeout(() => ov.remove(), 400);
+      if (typeof done === 'function') done();
+    }, kind === 'bye' ? 1500 : 1800);
+  }
+
   let logoutReturnFocus = null;
 
   function logout() {
@@ -483,6 +513,7 @@
     setAuthLoading(true, 'logout');
     setButtonLoading(button, true, 'جاري الخروج');
     window.setTimeout(() => {
+      const byeName = (currentUser && (currentUser.name || currentUser.full_name || currentUser.username)) || '';
       currentUser = null;
       localStorage.removeItem(K('session'));
       document.getElementById('app').classList.remove('admin-mode');
@@ -494,6 +525,7 @@
       window.PortalShell?.updateEnvironment();
       setButtonLoading(button, false);
       setAuthLoading(false, 'logout');
+      showGreeting('bye', byeName);
     }, 480);
   }
 
@@ -582,20 +614,50 @@
       { id: 'notifications', icon: 'fa-bell', label: 'الإشعارات' }
     ];
 
-    let html = '';
-    let lastSection = null;
+    const activeView = currentView || defaultView();
+    const groups = [];
+    let currentGroup = null;
     catalog.forEach(it => {
-      if (it.section) { lastSection = it.section; return; }
+      if (it.section) { currentGroup = { title: it.section, items: [] }; groups.push(currentGroup); return; }
       if (!canPage(it.id)) return;
-      if (lastSection) {
-        html += `<div class="nav-section">${lastSection}</div>`;
-        lastSection = null;
-      }
-      html += `<button class="nav-item" data-view="${it.id}" onclick="App.navigate('${it.id}')">
-        <i class="fas ${it.icon}"></i> ${it.label}
-      </button>`;
+      if (!currentGroup) { currentGroup = { title: 'عام', items: [] }; groups.push(currentGroup); }
+      currentGroup.items.push(it);
     });
+    const html = groups.filter(g => g.items.length).map(g => {
+      const open = g.items.some(it => it.id === activeView);
+      return `<div class="nav-group${open ? ' expanded' : ''}">
+        <button type="button" class="nav-group-toggle" aria-expanded="${open}" onclick="App.toggleNavGroup(this)">
+          <span class="nav-group-title">${g.title}</span><span class="nav-group-count">${g.items.length}</span><i class="fas fa-chevron-down nav-group-chevron"></i>
+        </button>
+        <div class="nav-group-items">${g.items.map(it => `<button class="nav-item" data-view="${it.id}" onclick="App.navigate('${it.id}')">
+        <i class="fas ${it.icon}"></i> ${it.label}
+      </button>`).join('')}</div>
+      </div>`;
+    }).join('');
     nav.innerHTML = html || '<div class="text-muted text-xs p-3">لا توجد صفحات متاحة لهذا الدور</div>';
+  }
+
+  function toggleNavGroup(btn) {
+    const group = btn && btn.closest ? btn.closest('.nav-group') : null;
+    if (!group) return;
+    const nav = group.parentElement;
+    const willOpen = !group.classList.contains('expanded');
+    nav.querySelectorAll('.nav-group.expanded').forEach(g => {
+      g.classList.remove('expanded');
+      const t = g.querySelector('.nav-group-toggle');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    });
+    if (willOpen) {
+      group.classList.add('expanded');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  function expandNavGroupFor(viewId) {
+    const item = document.querySelector('.nav-item[data-view="' + viewId + '"]');
+    const group = item && item.closest ? item.closest('.nav-group') : null;
+    if (!group || group.classList.contains('expanded')) return;
+    toggleNavGroup(group.querySelector('.nav-group-toggle'));
   }
 
   function navigate(viewId, push=true) {
@@ -612,6 +674,7 @@
     document.querySelectorAll('.nav-item').forEach(el => {
       el.classList.toggle('active', el.dataset.view === viewId);
     });
+    expandNavGroupFor(viewId);
     document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
     const el = document.getElementById('view-' + viewId);
     if (el) el.classList.remove('hidden');
@@ -694,6 +757,7 @@
   // ===== Student Dashboard =====
   async function renderStudentDashboard() {
     const u = currentUser;
+    if (u && u.role && u.role !== 'student') return renderRoleHome(u);
     const prog = S.programs.find(p => p.id === u.program || p.nameAr === u.program);
     let reqs = load('requests', []).filter(r => r.studentCode === (u.code || u.username) || r.studentUsername === u.username);
     if (window.DB && DB.isOnline()) {
@@ -747,6 +811,53 @@
       <div class="qa-tile" onclick="App.navigate('gpa-calc')"><span class="qa-icon"><i class="fas fa-calculator"></i></span><span>حاسبة المعدل</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('my-requests')"><span class="qa-icon"><i class="fas fa-list-check"></i></span><span>طلباتي</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('student-profile')"><span class="qa-icon"><i class="fas fa-id-card"></i></span><span>بياناتي</span><i class="fas fa-arrow-left qa-arrow"></i></div>`;
+  }
+
+  async function renderRoleHome(u) {
+    const reqs = load('requests', []);
+    const pending = reqs.filter(r => r.status !== 'executed' && r.status !== 'rejected' && r.status !== 'cancelled').length;
+    const executed = reqs.filter(r => r.status === 'executed').length;
+    const students = load('users', []).filter(x => x.role === 'student');
+    const myAdvisees = (u.role === 'advisor' || u.role === 'coordinator') ? students.filter(x => x.advisor === u.username).length : null;
+
+    const w = document.getElementById('sd-welcome');
+    if (w) w.textContent = 'مرحباً، ' + (u.name || u.full_name || u.username);
+    const meta = document.getElementById('sd-meta');
+    if (meta) {
+      meta.innerHTML = [
+        '<span class="dash-meta-chip"><i class="fas fa-user-shield"></i> ' + arEsc(roleName(u.role)) + '</span>',
+        myAdvisees != null ? '<span class="dash-meta-chip"><i class="fas fa-users"></i> الطلاب المنسوبون: <b>' + myAdvisees + '</b></span>' : ''
+      ].filter(Boolean).join('');
+    }
+
+    const stats = document.getElementById('sd-stats');
+    if (stats) {
+      stats.hidden = false;
+      const cards = [
+        { icon: 'fa-file-lines', label: 'إجمالي الطلبات', value: reqs.length, tone: 'navy' },
+        { icon: 'fa-hourglass-half', label: 'قيد المتابعة', value: pending, tone: 'amber' },
+        { icon: 'fa-circle-check', label: 'تم تنفيذها', value: executed, tone: 'green' },
+        { icon: 'fa-user-graduate', label: 'الطلاب المسجلون', value: students.length, tone: 'teal' }
+      ];
+      if (myAdvisees != null) cards.push({ icon: 'fa-user-tie', label: 'الطلاب المنسوبون إليّ', value: myAdvisees, tone: 'blue' });
+      stats.innerHTML = cards.map(item => `<div class="stat-card student-summary-card" style="--accent:var(--${item.tone === 'green' ? 'success' : item.tone === 'amber' ? 'warning' : item.tone === 'teal' ? 'teal' : item.tone === 'blue' ? 'blue' : 'navy'})"><span class="ico"><i class="fas ${item.icon}"></i></span><strong class="val">${arEsc(item.value)}</strong><span class="lbl">${item.label}</span></div>`).join('');
+    }
+
+    const advEl = document.getElementById('sd-advisor');
+    if (advEl) advEl.innerHTML = '';
+
+    const actions = document.getElementById('sd-actions');
+    if (actions) {
+      const tiles = [
+        { id: 'staff-inbox', icon: 'fa-inbox', label: 'صندوق الطلبات' },
+        { id: 'students-search', icon: 'fa-search', label: 'البحث عن طالب' },
+        { id: 'dean-dashboard', icon: 'fa-chart-pie', label: 'لوحة العميد' },
+        { id: 'students-mgmt', icon: 'fa-users', label: 'إدارة الطلاب' },
+        { id: 'export-print', icon: 'fa-print', label: 'تصدير وطباعة' },
+        { id: 'admin-dashboard', icon: 'fa-th-large', label: 'مركز مدير النظام' }
+      ].filter(t => canPage(t.id));
+      actions.innerHTML = tiles.map(t => `<div class="qa-tile" onclick="App.navigate('${t.id}')"><span class="qa-icon"><i class="fas ${t.icon}"></i></span><span>${t.label}</span><i class="fas fa-arrow-left qa-arrow"></i></div>`).join('');
+    }
   }
 
 function renderStudentProfile() {
@@ -4482,7 +4593,7 @@ ${coverPage}${pages}
     renderStudyCourses,
     fillStudyPrograms,
     onRegDeptChange,
-    switchTab, handleLogin, handleRegister, logout, confirmLogout, cancelLogout, navigate,
+    switchTab, handleLogin, handleRegister, logout, confirmLogout, cancelLogout, navigate, toggleNavGroup,
     openForm, addCourseRow, onTranscript, onAddDropTranscript, submitForm,
     academicRequestContinue, academicRequestAddRow, academicRequestRemoveRow, academicRequestUpdateTotals, academicRequestSubmit,
     toggleFormsCategory, addDropContinueFromInstructions, addDropBack,
@@ -4538,7 +4649,7 @@ ${coverPage}${pages}
     const hint = document.getElementById('password-match-text');
     regPasswordConfirm.setCustomValidity('');
     if (!regPasswordConfirm.value) {
-      hint.textContent = 'أعد كتابة كلمة المرور للتأكيد';
+      hint.textContent = '';
       hint.className = 'password-match-text';
       regPasswordConfirm.classList.remove('is-match', 'is-mismatch');
     } else if (regPasswordInput.value === regPasswordConfirm.value) {
