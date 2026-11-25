@@ -136,6 +136,8 @@
     if (pageId === 'voice-admin') return currentUser.role === 'admin';
     if (pageId === 'student-voice') return currentUser.role === 'student' || currentUser.role === 'admin';
     if (pageId === 'imports' || pageId === 'transcripts') return currentUser.role === 'admin';
+    if (pageId === 'ss-center' || pageId === 'ss-new' || pageId === 'ss-track') return true;
+    if (pageId === 'ss-desk' || pageId === 'ss-reports') return ['affairs','vice','dean','manager','admin'].includes(currentUser.role);
     if (pageId === 'talent-admin') return currentUser.role === 'admin';
     if (pageId === 'faculty-management') return currentUser.role === 'admin';
     if (pageId === 'talent-program') return currentUser.role === 'student' || currentUser.role === 'admin';
@@ -593,6 +595,12 @@
       { id: 'services', icon: 'fa-th-large', label: 'خدمات إلكترونية' },
       { id: 'student-voice', icon: 'fa-comment-dots', label: 'صوت الطالب' },
       { id: 'conversations', icon: 'fa-comments', label: 'المحادثات' },
+      { section: 'خدمات الطلاب والخريجين' },
+      { id: 'ss-center', icon: 'fa-hand-holding-hand', label: 'مركز الخدمات' },
+      { id: 'ss-new', icon: 'fa-file-circle-plus', label: 'تقديم طلب خدمة' },
+      { id: 'ss-track', icon: 'fa-location-dot', label: 'متابعة طلب' },
+      { id: 'ss-desk', icon: 'fa-inbox', label: 'إدارة طلبات الخدمات' },
+      { id: 'ss-reports', icon: 'fa-chart-pie', label: 'مؤشرات الخدمات' },
       { section: 'العمل' },
       { id: 'staff-inbox', icon: 'fa-inbox', label: 'صندوق الطلبات' },
       { id: 'students-search', icon: 'fa-search', label: 'البحث عن طالب' },
@@ -687,6 +695,11 @@
       'admin-dashboard': renderAdminDashboard,
       'imports': () => window.StudentDataCenter && StudentDataCenter.renderImportsCenter(),
       'transcripts': () => window.TranscriptImportCenter && TranscriptImportCenter.render(),
+      'ss-center': () => window.StudentServices && StudentServices.renderApp('ss-center'),
+      'ss-new': () => window.StudentServices && StudentServices.renderApp('ss-new'),
+      'ss-track': () => window.StudentServices && StudentServices.renderApp('ss-track'),
+      'ss-desk': () => window.StudentServices && StudentServices.renderApp('ss-desk'),
+      'ss-reports': () => window.StudentServices && StudentServices.renderApp('ss-reports'),
       'talent-program': () => window.TalentProgram && TalentProgram.renderStudent(),
       'talent-admin': () => window.TalentProgram && TalentProgram.renderAdmin(),
       'faculty-management': () => window.FacultyManagement && FacultyManagement.render(),
@@ -742,6 +755,7 @@
       'periods': 'الفترات الأكاديمية',
       'assignments': 'إسناد المرشدين', 'imports': 'رفع البيانات الأكاديمية',
       'transcripts': 'رفع السجلات الدراسية',
+      'ss-center': 'مركز خدمات الطلاب والخريجين', 'ss-new': 'تقديم طلب خدمة', 'ss-track': 'متابعة طلب خدمة', 'ss-desk': 'إدارة طلبات الخدمات', 'ss-reports': 'مؤشرات الخدمات',
       'talent-program': 'برنامج دعم الموهوبين', 'talent-admin': 'إدارة دعم الموهوبين',
       'local-backup': 'نسخ البيانات واستعادتها',
       'users-mgmt': 'المستخدمون', 'roles-mgmt': 'الأدوار والصلاحيات', 'export-print': 'تصدير وطباعة',
@@ -812,6 +826,7 @@
       <div class="qa-tile" onclick="App.navigate('forms-list')"><span class="qa-icon"><i class="fas fa-file-circle-plus"></i></span><span>تقديم طلب</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('study-plan')"><span class="qa-icon"><i class="fas fa-sitemap"></i></span><span>الخطط الدراسية</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('gpa-calc')"><span class="qa-icon"><i class="fas fa-calculator"></i></span><span>حاسبة المعدل</span><i class="fas fa-arrow-left qa-arrow"></i></div>
+      <div class="qa-tile" onclick="App.navigate('ss-center')"><span class="qa-icon"><i class="fas fa-hand-holding-hand"></i></span><span>خدمات الطلاب والخريجين</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('my-requests')"><span class="qa-icon"><i class="fas fa-list-check"></i></span><span>طلباتي</span><i class="fas fa-arrow-left qa-arrow"></i></div>
       <div class="qa-tile" onclick="App.navigate('student-profile')"><span class="qa-icon"><i class="fas fa-id-card"></i></span><span>بياناتي</span><i class="fas fa-arrow-left qa-arrow"></i></div>`;
   }
