@@ -33,3 +33,11 @@
 .step-lbl.step-skip{text-decoration:line-through;opacity:.7}
 .step-sub{font-size:.55rem;color:var(--gray-500);text-align:center;max-width:70px;line-height:1.2}
 .adx-periods input[type=datetime-local]{min-width:185px}
+/* الوضع الداكن */
+html[data-theme="dark"] #app .card-header .fw-extrabold,
+html[data-theme="dark"] #app.admin-mode .card .fw-extrabold{color:#e8eef7!important}
+html[data-theme="dark"] .dean-metric{background:var(--surface-soft,#172437)!important;border-color:var(--gray-200)!important;color:#e8eef7}
+html[data-theme="dark"] .dean-metric strong{color:#f1f6fc!important}
+html[data-theme="dark"] .dean-metric small,html[data-theme="dark"] .dean-metric .dean-metric-label{color:#a9b8ca!important}
+html[data-theme="dark"] .adx-mini-stats b{color:#f1f6fc}
+html[data-theme="dark"] .adx-chip{background:rgba(94,234,212,.14)}
