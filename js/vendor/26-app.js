@@ -474,7 +474,7 @@
     ov.id = 'greet-overlay';
     ov.className = 'greet-overlay';
     ov.setAttribute('role', 'status');
-    ov.innerHTML = '<div class="greet-box"><img class="greet-logo" src="assets/8-faculty-logo.png" alt="" /><div class="greet-word">' + (kind === 'bye' ? 'وداعاً' : 'أهلاً') + '</div>' + (name ? '<div class="greet-name">' + arEsc(name) + '</div>' : '') + '</div>';
+    ov.innerHTML = '<div class="greet-box"><div class="greet-brand"><img class="greet-logo" src="assets/13-university-logo.png" alt="" /><div class="greet-brand-titles"><div class="greet-brand-title">المنصة الرقمية لكلية العلوم</div><div class="greet-brand-sub">جامعة سوهاج</div></div><img class="greet-logo" src="assets/8-faculty-logo.png" alt="" /></div><div class="greet-word">' + (kind === 'bye' ? 'وداعاً' : 'أهلاً') + '</div>' + (name ? '<div class="greet-name">' + arEsc(name) + '</div>' : '') + '</div>';
     document.body.appendChild(ov);
     requestAnimationFrame(() => ov.classList.add('show'));
     window.setTimeout(() => {
@@ -610,8 +610,6 @@
       { id: 'local-backup', icon: 'fa-box-archive', label: 'نسخ البيانات واستعادتها' },
       { id: 'voice-admin', icon: 'fa-chart-bar', label: 'إدارة صوت الطالب' },
       { id: 'roles-mgmt', icon: 'fa-user-lock', label: 'الأدوار والصلاحيات' },
-      { section: 'الحساب' },
-      { id: 'notifications', icon: 'fa-bell', label: 'الإشعارات' }
     ];
 
     const activeView = currentView || defaultView();
