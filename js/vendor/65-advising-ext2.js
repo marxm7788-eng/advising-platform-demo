@@ -312,3 +312,28 @@
   window.AdvNotif = AdvNotif;
   window.AdvTalent = AdvTalent;
 })();
+
+/* تطبيق الفترات الأكاديمية على خدمات الطلاب والخريجين وبرنامج الموهوبين */
+(function () {
+  function closedMsg(id) {
+    if (!window.AdvExt || AdvExt.periodOpen(id)) return false;
+    AdvExt.toast('هذه الخدمة مغلقة حاليًا حسب الفترة الأكاديمية', 'err');
+    return true;
+  }
+  function wrap(obj, name, id, ret) {
+    if (!obj || typeof obj[name] !== 'function' || obj[name].__adx) return;
+    const orig = obj[name];
+    obj[name] = function (...a) {
+      if (closedMsg(id)) { if (a[0] && a[0].preventDefault) a[0].preventDefault(); return ret; }
+      return orig.apply(this, a);
+    };
+    obj[name].__adx = true;
+  }
+  function apply() {
+    wrap(window.StudentServices, 'submit', '_ss');
+    wrap(window.TalentProgram, 'startRegistration', '_talent');
+    wrap(window.TalentProgram, 'resumeRegistration', '_talent');
+  }
+  apply();
+  document.addEventListener('DOMContentLoaded', apply);
+})();
