@@ -11,6 +11,8 @@
   const S = window.FOS_SEED;
   const K = (k) => 'fos_v2_' + k;
   let _gpaState = { section: '', program: '', terms: [] };
+  let _gpaMode = 'manual';
+  let _gpaImport = null;
   const GPA_SECTIONS = [
     { id: 'biological', label: 'شعبة العلوم البيولوجية' },
     { id: 'physical', label: 'شعبة العلوم الفيزيائية' },
@@ -604,7 +606,6 @@
       { id: 'assignments', icon: 'fa-user-tie', label: 'إسناد المرشدين' },
       { id: 'users-mgmt', icon: 'fa-user-shield', label: 'المستخدمون' },
       { id: 'imports', icon: 'fa-file-import', label: 'رفع البيانات الأكاديمية' },
-      { id: 'transcripts', icon: 'fa-file-invoice', label: 'رفع السجلات الدراسية' },
       { id: 'talent-admin', icon: 'fa-star', label: 'إدارة دعم الموهوبين' },
       { id: 'faculty-management', icon: 'fa-users-gear', label: 'أعضاء هيئة التدريس' },
       { id: 'local-backup', icon: 'fa-box-archive', label: 'نسخ البيانات واستعادتها' },
@@ -678,6 +679,10 @@
     if (el) el.classList.remove('hidden');
     document.getElementById('topbar-title').textContent = viewTitle(viewId);
     window.PortalShell?.onNavigate(viewId);
+    if (viewId === 'student-dashboard' && currentUser && currentUser.role !== 'student') {
+      const fixHomeTitle = () => { const tt = document.getElementById('topbar-title'); if (tt && currentView === 'student-dashboard') tt.textContent = 'القائمة الرئيسية'; };
+      fixHomeTitle(); window.setTimeout(fixHomeTitle, 0);
+    }
     const renderers = {
       'admin-dashboard': renderAdminDashboard,
       'imports': () => window.StudentDataCenter && StudentDataCenter.renderImportsCenter(),
@@ -926,7 +931,7 @@ function renderStudentProfile() {
   }
 
   /* ===== Study Plans — Professional Academic Table ===== */
-  let _spState = { section: '', program: '', level: '', term: '', q: '' };
+  let _spState = { section: '', program: '', level: '', term: '', type: '', hours: '', q: '' };
   let _spView = 'table';
 
   function spParseTerm(termKey) {
@@ -1226,6 +1231,7 @@ function renderStudentProfile() {
         </div>
       </div>
       <div class="sp-filters">
+        <div class="sp-filters-head"><span class="sp-filters-title"><i class="fas fa-sliders"></i> تصفية الخطة</span><span class="sp-filters-hint">اختر القسم ثم البرنامج، ويمكنك تضييق النتائج بالمستوى والفصل ونوع المقرر والساعات أو البحث المباشر</span></div>
         <div class="grid-3 mb-2">
           <div class="form-group mb-0"><label>القسم / النوع</label>
             <select class="form-control" id="sp-section" onchange="App.spOnFilter('section')">
@@ -1259,6 +1265,25 @@ function renderStudentProfile() {
               <option value="2">الفصل الثاني</option>
             </select>
           </div>
+          <div class="form-group mb-0"><label>نوع المقرر</label>
+            <select class="form-control" id="sp-type" onchange="App.spOnFilter('type')">
+              <option value="">الكل</option>
+              <option value="required">إجباري</option>
+              <option value="elective">اختياري</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-3 mt-2">
+          <div class="form-group mb-0"><label>الساعات المعتمدة</label>
+            <select class="form-control" id="sp-hours" onchange="App.spOnFilter('hours')">
+              <option value="">الكل</option>
+              <option value="1">ساعة واحدة</option>
+              <option value="2">ساعتان</option>
+              <option value="3">3 ساعات</option>
+              <option value="4+">4 ساعات فأكثر</option>
+            </select>
+          </div>
+          <div class="form-group mb-0"></div>
           <div class="form-group mb-0" style="display:flex;align-items:flex-end">
             <button type="button" class="btn btn-outline btn-sm" onclick="App.spResetFilters()"><i class="fas fa-undo"></i> إعادة ضبط الفلاتر</button>
           </div>
@@ -1271,8 +1296,12 @@ function renderStudentProfile() {
     fillStudyPrograms(true);
     const lv = document.getElementById('sp-level');
     const tm = document.getElementById('sp-term');
+    const ty = document.getElementById('sp-type');
+    const hr = document.getElementById('sp-hours');
     if (lv) lv.value = _spState.level || '';
     if (tm) tm.value = _spState.term || '';
+    if (ty) ty.value = _spState.type || '';
+    if (hr) hr.value = _spState.hours || '';
     spEnhanceDropdowns();
     renderStudyCourses();
   }
@@ -1305,6 +1334,10 @@ function renderStudentProfile() {
       _spState.level = document.getElementById('sp-level').value;
     } else if (which === 'term') {
       _spState.term = document.getElementById('sp-term').value;
+    } else if (which === 'type') {
+      _spState.type = document.getElementById('sp-type').value;
+    } else if (which === 'hours') {
+      _spState.hours = document.getElementById('sp-hours').value;
     } else if (which === 'q') {
       _spState.q = document.getElementById('sp-search').value;
     }
@@ -1312,7 +1345,7 @@ function renderStudentProfile() {
   }
 
   function spResetFilters() {
-    _spState = { section: '', program: '', level: '', term: '', q: '' };
+    _spState = { section: '', program: '', level: '', term: '', type: '', hours: '', q: '' };
     renderStudyPlan();
   }
 
@@ -1325,6 +1358,13 @@ function renderStudentProfile() {
     const levelF = _spState.level || document.getElementById('sp-level')?.value || '';
     const termF = _spState.term || document.getElementById('sp-term')?.value || '';
     const q = (_spState.q || document.getElementById('sp-search')?.value || '').trim().toLowerCase();
+    const typeF = _spState.type || document.getElementById('sp-type')?.value || '';
+    const hoursF = _spState.hours || document.getElementById('sp-hours')?.value || '';
+    const hoursOk = h => {
+      if (!hoursF) return true;
+      const n = +h || 0;
+      return hoursF === '4+' ? n >= 4 : n === +hoursF;
+    };
 
     const items = [];
     const termKeys = Object.keys(prog.semesters || {}).sort((a, b) => {
@@ -1338,12 +1378,14 @@ function renderStudentProfile() {
       (prog.semesters[termKey] || []).forEach(c => {
         if (!c) return;
         if (c.type === 'elective_group') {
+          if (typeF === 'required') return;
           const opts = (c.options || []).filter(o => {
+            if (!hoursOk(o.hours)) return false;
             if (!q) return true;
             const hay = ((o.code || '') + ' ' + (o.name || '') + ' ' + (c.title || '')).toLowerCase();
             return hay.includes(q);
           });
-          if (q && !opts.length) return;
+          if ((q || hoursF) && !opts.length) return;
           items.push({
             kind: 'elective_group',
             title: c.title || 'مقرر اختياري',
@@ -1361,6 +1403,8 @@ function renderStudentProfile() {
           });
         } else {
           if (!c.code) return;
+          if (typeF === 'elective' && c.type !== 'elective') return;
+          if (!hoursOk(c.hours)) return;
           const name = (c.name || '').trim();
           if (q) {
             const hay = (c.code + ' ' + name).toLowerCase();
@@ -2496,10 +2540,15 @@ ${coverPage}${pages}
     const canAddTerm = !!_gpaState.section && (_gpaState.section !== 'special' || !!_gpaState.program);
     root.innerHTML = `<div class="gpa-modern-shell">
       <section class="gpa-hero"><div class="gpa-hero-icon"><i class="fas fa-calculator"></i></div><div><span class="gpa-kicker">أداة أكاديمية ذكية</span><h1>حاسبة المعدل</h1><p>اختر شعبتك وبرنامجك، ثم أضف العام الجامعي ومقرراتك.</p></div><div class="gpa-result-orb"><strong>${result.gpa.toFixed(3)}</strong><span>المعدل المتوقع</span></div></section>
+      <section class="gpa-mode-card"><div class="sp-view-toggle gpa-mode-toggle" role="tablist">
+        <button type="button" id="gpa-mode-manual" class="${_gpaMode==='manual'?'active':''}" onclick="App.gpaSetMode('manual')"><i class="fas fa-keyboard"></i> إدخال يدوي</button>
+        <button type="button" id="gpa-mode-excel" class="${_gpaMode==='excel'?'active':''}" onclick="App.gpaSetMode('excel')"><i class="fas fa-file-excel"></i> رفع ملف Excel</button>
+      </div></section>
       <section class="gpa-selection-card"><div class="gpa-step"><span>1</span><div><b>حدد مسارك الدراسي</b><small>يُستخدم الاختيار لتصفية المقررات المناسبة لك</small></div></div><div class="gpa-select-grid"><label>الشعبة<select class="form-control" id="gpa-section-select" onchange="App.gpaSelectSection(this.value)"><option value="">— اختر الشعبة —</option>${GPA_SECTIONS.map(s => `<option value="${s.id}" ${_gpaState.section === s.id ? 'selected' : ''}>${s.label}</option>`).join('')}</select></label><label>البرنامج<select class="form-control" id="gpa-program-select" ${_gpaState.section ? '' : 'disabled'} onchange="App.gpaSelectProgram(this.value)"><option value="">${_gpaState.section === 'special' ? '— اختر البرنامج الخاص —' : 'لم أشعب على برنامج بعد'}</option>${programs.map(p => `<option value="${gpaEsc(p.id)}" ${_gpaState.program === p.id ? 'selected' : ''}>${gpaEsc(p.name)}</option>`).join('')}</select></label></div>${_gpaState.section && !_gpaState.program ? `<div class="gpa-info-note"><i class="fas fa-circle-info"></i><span>سيتم عرض مقررات المستوى الأول من ${gpaEsc(GPA_SECTIONS.find(s => s.id === _gpaState.section)?.label)} فقط لأنك لم تتشعب على برنامج بعد.</span></div>` : ''}</section>
       ${gpaAdminYearsHtml()}
       <section class="gpa-summary-strip"><div><span>الأعوام المضافة</span><strong>${_gpaState.terms.length}</strong></div><div><span>المقررات المحتسبة</span><strong>${gpaCurrentGrades().length}</strong></div><div><span>إجمالي الساعات</span><strong>${result.hours}</strong></div><div class="gpa-summary-note"><i class="fas fa-lightbulb"></i><span>يمكن تسجيل مقرر من الفصل الأول في أي عام أو فصل تسجيل آخر</span></div></section>
-      <section class="gpa-terms-section"><div class="gpa-section-heading"><div><span class="gpa-kicker">2 · السجل الدراسي</span><h2>الأعوام الجامعية والمقررات</h2><p>${_gpaState.section ? 'أضف العام الجامعي الذي سُجلت فيه المقررات، ثم أضف كل مقرر بمستواه وفصله الأصلي.' : 'ابدأ باختيار الشعبة حتى تظهر لك أدوات إضافة الأعوام.'}</p></div><button type="button" class="btn btn-primary" ${canAddTerm ? '' : 'disabled'} onclick="App.gpaAddTerm()"><i class="fas fa-plus"></i> إضافة عام جامعي</button></div><div id="gpa-terms-list">${_gpaState.terms.length ? _gpaState.terms.map(gpaTermHtml).join('') : `<div class="gpa-empty"><i class="fas fa-calendar-days"></i><b>لا توجد أعوام مضافة بعد</b><span>${canAddTerm ? 'اضغط «إضافة عام جامعي» لبدء إدخال مقرراتك.' : 'اختر الشعبة والبرنامج أولًا.'}</span></div>`}</div></section>
+      ${_gpaMode === 'excel' ? gpaExcelHtml() : ''}
+      <section class="gpa-terms-section" ${_gpaMode === 'excel' ? 'hidden' : ''}><div class="gpa-section-heading"><div><span class="gpa-kicker">2 · السجل الدراسي</span><h2>الأعوام الجامعية والمقررات</h2><p>${_gpaState.section ? 'أضف العام الجامعي الذي سُجلت فيه المقررات، ثم أضف كل مقرر بمستواه وفصله الأصلي.' : 'ابدأ باختيار الشعبة حتى تظهر لك أدوات إضافة الأعوام.'}</p></div><button type="button" class="btn btn-primary" ${canAddTerm ? '' : 'disabled'} onclick="App.gpaAddTerm()"><i class="fas fa-plus"></i> إضافة عام جامعي</button></div><div id="gpa-terms-list">${_gpaState.terms.length ? _gpaState.terms.map(gpaTermHtml).join('') : `<div class="gpa-empty"><i class="fas fa-calendar-days"></i><b>لا توجد أعوام مضافة بعد</b><span>${canAddTerm ? 'اضغط «إضافة عام جامعي» لبدء إدخال مقرراتك.' : 'اختر الشعبة والبرنامج أولًا.'}</span></div>`}</div></section>
       <section class="gpa-scale-card"><div><span class="gpa-kicker">مرجع سريع</span><h2>سلم التقديرات</h2></div><div class="gpa-scale-pills">${S.gradeScale.map(g => `<span><b>${g.letter}</b><small>${g.points.toFixed(3)} نقطة</small></span>`).join('')}</div></section>
     </div>`;
   }
@@ -2510,6 +2559,124 @@ ${coverPage}${pages}
   function gpaCourseHtml(term, course) {
     return `<div class="gpa-course-row"><div class="gpa-course-select"><i class="fas fa-book-open"></i><div><strong>${gpaEsc(course.code)} — ${gpaEsc(course.name)}</strong><small>المستوى ${course.level} · الفصل ${course.semester === '1' ? 'الأول' : 'الثاني'} · ${course.hours} ساعات</small></div></div><span class="gpa-course-hours">${course.hours} ساعات</span><span class="gpa-grade-badge">${gpaEsc(course.grade)} · ${Number(letterPoints(course.grade)).toFixed(3)}</span><button type="button" class="gpa-delete-course" onclick="App.gpaRemoveCourse('${term.id}','${gpaEsc(course.id)}')"><i class="fas fa-xmark"></i></button></div>`;
   }
+  function gpaSetMode(mode) {
+    _gpaMode = mode === 'excel' ? 'excel' : 'manual';
+    if (_gpaMode === 'manual') _gpaImport = null;
+    renderGPACalc();
+  }
+
+  function gpaExcelHtml() {
+    const imp = _gpaImport;
+    let body;
+    if (!imp) {
+      body = `<div class="gpa-excel-drop">
+        <label class="gpa-excel-dropzone" for="gpa-excel-file"><i class="fas fa-cloud-arrow-up"></i><b>اختر ملف السجل الدراسي</b><span>xlsx أو xls أو csv — بأعمدة: كود المقرر، اسم المقرر، الساعات، التقدير (والمستوى/الفصل اختياريان)</span></label>
+        <input type="file" id="gpa-excel-file" accept=".xlsx,.xls,.csv" hidden onchange="App.gpaExcelPick(this)">
+        <div class="gpa-excel-note"><i class="fas fa-shield-halved"></i> يُعالج الملف محلياً في متصفحك فقط: لا يُحفظ في أي مكان، ولا يصل إلى بيانات أي طالب آخر، ولا يغيّر أي سجل رسمي. بعد المعاينة تقرر أنت اعتماده أو تجاهله.</div>
+      </div>`;
+    } else if (imp.error) {
+      body = `<div class="alert alert-warn"><i class="fas fa-triangle-exclamation"></i> ${gpaEsc(imp.error)}</div>
+        <div class="gpa-excel-actions"><button type="button" class="btn btn-outline" onclick="App.gpaExcelClear()"><i class="fas fa-undo"></i> اختيار ملف آخر</button></div>`;
+    } else {
+      const result = calcGPA(imp.courses);
+      const rows = imp.courses.slice(0, 60).map(c => `<tr><td>${gpaEsc(c.code)}</td><td>${gpaEsc(c.name)}</td><td>${c.hours}</td><td>${gpaEsc(c.grade)}</td><td>${Number(letterPoints(c.grade)).toFixed(3)}</td></tr>`).join('');
+      body = `<div class="gpa-excel-preview">
+        <div class="gpa-excel-file-chip"><i class="fas fa-file-excel"></i> ${gpaEsc(imp.fileName)} — ${imp.courses.length} مقرر${imp.skipped ? ` (تخطّي ${imp.skipped} صف غير مكتمل)` : ''}</div>
+        <div class="table-wrap"><table class="data"><thead><tr><th>الكود</th><th>المقرر</th><th>الساعات</th><th>التقدير</th><th>النقاط</th></tr></thead><tbody>${rows}</tbody></table>${imp.courses.length > 60 ? '<small>تظهر أول 60 مقرراً في المعاينة، وسيُعتمد الكل.</small>' : ''}</div>
+        <div class="gpa-excel-result"><div><span>المعدل المحسوب من الملف</span><strong>${result.gpa.toFixed(3)}</strong></div><div><span>إجمالي الساعات</span><strong>${result.hours}</strong></div></div>
+        <div class="gpa-excel-actions">
+          <button type="button" class="btn btn-primary" onclick="App.gpaExcelApply()"><i class="fas fa-check"></i> اعتماد وإضافة للحاسبة</button>
+          <button type="button" class="btn btn-outline" onclick="App.gpaExcelClear()"><i class="fas fa-xmark"></i> تجاهل الملف</button>
+        </div>
+      </div>`;
+    }
+    return `<section class="gpa-terms-section"><div class="gpa-section-heading"><div><span class="gpa-kicker">2 · الاستيراد</span><h2>رفع ملف السجل (Excel)</h2><p>ارفع ملفاً يحتوي مقرراتك وتقديراتك لتحسب المعدل تلقائياً بعد المعاينة.</p></div></div>${body}</section>`;
+  }
+
+  function gpaMapGrade(value) {
+    const t = String(value == null ? '' : value).trim().toUpperCase();
+    if (S.gradeScale.some(g => g.letter === t)) return t;
+    const n = String(value == null ? '' : value).replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').trim();
+    if (/ممتاز|امتياز/.test(n)) return 'A+';
+    if (/جيد جدا/.test(n)) return 'B+';
+    if (/^جيد$|^جيده?$/.test(n)) return 'B';
+    if (/مقبول/.test(n)) return 'C';
+    if (/ضعيف/.test(n)) return 'D';
+    if (/راسب|رسوب|سقط/.test(n)) return 'F';
+    return null;
+  }
+
+  function gpaParseExcelRows(rows) {
+    const norm = v => String(v == null ? '' : v).replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').trim();
+    let headerRow = -1, map = {};
+    for (let i = 0; i < Math.min(rows.length, 20); i++) {
+      const cells = (rows[i] || []).map(norm);
+      const m = {};
+      cells.forEach((c, idx) => {
+        if (!m.code && /كود|رمز/.test(c) && !/اسم/.test(c)) m.code = idx;
+        else if (!m.name && /اسم المقرر|اسم الماده|المقرر|الماده/.test(c) && !/كود|رمز|تقدير/.test(c)) m.name = idx;
+        else if (!m.hours && /ساعات|ساعه/.test(c)) m.hours = idx;
+        else if (!m.grade && /تقدير|الدرجه/.test(c)) m.grade = idx;
+        else if (!m.level && /مستوي|فرقه/.test(c)) m.level = idx;
+        else if (!m.semester && /فصل/.test(c)) m.semester = idx;
+      });
+      if (Number.isInteger(m.code) && Number.isInteger(m.hours) && Number.isInteger(m.grade)) { headerRow = i; map = m; break; }
+    }
+    if (headerRow < 0) return { error: 'لم أتعرف على أعمدة الملف. المطلوب أعمدة: كود المقرر، الساعات، التقدير — ويفضل اسم المقرر.' };
+    const courses = [];
+    let skipped = 0;
+    for (let i = headerRow + 1; i < rows.length; i++) {
+      const r = rows[i] || [];
+      const code = String(r[map.code] == null ? '' : r[map.code]).trim();
+      if (!code || /كود|رمز/.test(code)) continue;
+      const hours = Number(String(r[map.hours]).replace(/[^0-9.]/g, '')) || 0;
+      const grade = gpaMapGrade(r[map.grade]);
+      if (!hours || !grade) { skipped++; continue; }
+      const name = map.name != null ? String(r[map.name] == null ? '' : r[map.name]).trim() : '';
+      courses.push({ code, name: name || code, hours, grade });
+    }
+    if (!courses.length) return { error: 'الملف لا يحتوي مقررات صالحة (تحقق من الساعات والتقديرات).' };
+    return { courses, skipped };
+  }
+
+  function gpaExcelPick(input) {
+    const file = input && input.files && input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onerror = () => { _gpaImport = { error: 'تعذر قراءة الملف، حاول مرة أخرى.' }; renderGPACalc(); };
+    reader.onload = (e) => {
+      try {
+        const wb = XLSX.read(e.target.result, { type: 'array' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' });
+        const parsed = gpaParseExcelRows(rows);
+        _gpaImport = parsed.error ? { error: parsed.error } : { fileName: file.name, courses: parsed.courses, skipped: parsed.skipped || 0 };
+      } catch (err) {
+        _gpaImport = { error: 'صيغة الملف غير مدعومة. استخدم xlsx أو xls أو csv.' };
+      }
+      renderGPACalc();
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function gpaExcelApply() {
+    const imp = _gpaImport;
+    if (!imp || !imp.courses || !imp.courses.length) return;
+    _gpaState.terms.push({
+      id: 'term_imp_' + Date.now(),
+      year: gpaAcademicYears().at(-1),
+      registrationSemester: '1',
+      courses: imp.courses.map((c, i) => ({ id: c.code + '_imp' + i, code: c.code, name: c.name, hours: c.hours, level: '1', semester: '1', grade: c.grade })),
+      draft: { level: '1', semester: '1', code: '', grade: S.gradeScale[0].letter }
+    });
+    _gpaImport = null;
+    _gpaMode = 'manual';
+    renderGPACalc();
+    if (typeof toast === 'function') toast('تم اعتماد الملف وإضافة مقرراته للحاسبة');
+  }
+
+  function gpaExcelClear() { _gpaImport = null; renderGPACalc(); }
+
   function gpaSelectSection(section) { _gpaState.section = section; _gpaState.program = ''; _gpaState.terms = []; renderGPACalc(); }
   function gpaSelectProgram(program) { _gpaState.program = program; _gpaState.terms = []; renderGPACalc(); }
   function gpaAddTerm() { if (!_gpaState.section || (_gpaState.section === 'special' && !_gpaState.program)) return; _gpaState.terms.push({ id: 'term_' + Date.now(), year: gpaAcademicYears().at(-1), registrationSemester: '1', courses: [], draft: { level: '1', semester: '1', code: '', grade: S.gradeScale[0].letter } }); renderGPACalc(); }
@@ -4598,7 +4765,7 @@ ${coverPage}${pages}
     addAddDropRow: addDropRow, onAddDropCoursePick, removeAddDropRow,
     addDropValidateData, addDropValidateCourses, updateAddDropPrograms, submitAddDrop, saveAddDropDraft, printAddDropRequest, printAddDropCurrent,
     viewRequest, process, goBackDetail,
-    addGPARow, updateGPAPreview, gpaSelectSection, gpaSelectProgram, gpaAddTerm, gpaRemoveTerm, gpaTermChange, gpaDraftChange, gpaCommitCourse, gpaRemoveCourse, gpaAddAcademicYear, gpaRemoveAcademicYear,
+    addGPARow, updateGPAPreview, gpaSetMode, gpaExcelPick, gpaExcelApply, gpaExcelClear, gpaSelectSection, gpaSelectProgram, gpaAddTerm, gpaRemoveTerm, gpaTermChange, gpaDraftChange, gpaCommitCourse, gpaRemoveCourse, gpaAddAcademicYear, gpaRemoveAcademicYear,
     togglePeriod, assignOne, bulkAssign,
     changePassword, doStudentSearch, showStudentDetail, exportPDF,
     renderStaffInbox, renderDeanDashboard, getCurrentUser: () => currentUser,

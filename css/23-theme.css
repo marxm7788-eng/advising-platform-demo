@@ -537,12 +537,22 @@ html[data-theme="dark"] .landing-page .login-panel .input-icon i { color: #6b7d9
 /* شاشة ترحيب/وداع متحركة */
 .greet-overlay {
   position: fixed; inset: 0; z-index: 10070; display: grid; place-items: center;
-  background: linear-gradient(135deg, #0c1e36 0%, #123250 60%, #0f766e 130%);
+  background: url('../assets/4-campus1.webp') center / cover no-repeat, linear-gradient(135deg, #0c1e36 0%, #123250 60%, #0f766e 130%);
   opacity: 0; pointer-events: none; transition: opacity .35s ease;
+}
+.greet-overlay::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(12,30,54,.86) 0%, rgba(18,50,80,.68) 55%, rgba(15,118,110,.55) 130%);
+  backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px);
 }
 .greet-overlay.show { opacity: 1; pointer-events: auto; }
 .greet-box {
-  text-align: center; color: #fff;
+  position: relative; text-align: center; color: #fff;
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 26px; padding: 2.1rem 2.8rem;
+  box-shadow: 0 26px 64px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   transform: translateY(14px) scale(.94); opacity: 0;
   transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease;
 }
@@ -566,3 +576,29 @@ html[data-theme="dark"] .landing-page .login-panel .input-icon i { color: #6b7d9
   .greet-logo { animation: none; }
   .greet-box, .greet-overlay { transition-duration: .01ms; }
 }
+
+/* ترويسة بطاقة فلاتر الخطط الدراسية */
+.sp-filters-head { display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:.8rem; padding-bottom:.6rem; border-bottom:1px dashed rgba(148,163,184,.35); }
+.sp-filters-title { font-weight:800; color:var(--navy); display:inline-flex; align-items:center; gap:.45rem; }
+.sp-filters-title i { color:var(--teal); }
+.sp-filters-hint { font-size:.78rem; color:var(--text-muted,#64748b); }
+html[data-theme="dark"] .sp-filters-title { color:var(--ink); }
+html[data-theme="dark"] .sp-filters-head { border-color:rgba(148,163,184,.22); }
+
+/* حاسبة المعدل — اختيار الوضع والاستيراد */
+.gpa-mode-card { display:flex; justify-content:center; margin-bottom:1rem; }
+.gpa-mode-toggle button { min-width:150px; }
+.gpa-excel-dropzone { display:flex; flex-direction:column; align-items:center; gap:.4rem; padding:2rem 1.2rem; border:2px dashed rgba(20,184,166,.45); border-radius:16px; background:rgba(20,184,166,.05); cursor:pointer; text-align:center; transition:border-color .2s, background .2s; }
+.gpa-excel-dropzone:hover { border-color:var(--teal); background:rgba(20,184,166,.1); }
+.gpa-excel-dropzone i { font-size:1.8rem; color:var(--teal); }
+.gpa-excel-dropzone span { font-size:.8rem; color:var(--text-muted,#64748b); }
+.gpa-excel-note { margin-top:.8rem; font-size:.8rem; color:var(--text-muted,#64748b); display:flex; gap:.45rem; align-items:flex-start; }
+.gpa-excel-note i { color:var(--teal); margin-top:.15rem; }
+.gpa-excel-file-chip { display:inline-flex; align-items:center; gap:.45rem; background:rgba(20,184,166,.1); color:var(--teal); border:1px solid rgba(20,184,166,.3); border-radius:999px; padding:.35rem .9rem; font-size:.82rem; font-weight:700; margin-bottom:.8rem; }
+.gpa-excel-result { display:flex; gap:1rem; margin:.9rem 0; }
+.gpa-excel-result > div { flex:1; background:var(--navy); color:#fff; border-radius:14px; padding:.8rem 1rem; text-align:center; }
+.gpa-excel-result span { display:block; font-size:.75rem; opacity:.8; }
+.gpa-excel-result strong { font-size:1.4rem; }
+.gpa-excel-actions { display:flex; gap:.6rem; flex-wrap:wrap; }
+html[data-theme="dark"] .gpa-excel-dropzone { background:rgba(20,184,166,.08); }
+html[data-theme="dark"] .gpa-excel-note, html[data-theme="dark"] .gpa-excel-dropzone span { color:var(--text-muted); }
